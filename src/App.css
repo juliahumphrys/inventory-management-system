@@ -13,9 +13,18 @@
   }
 }
 
+/* New styles for the red banner/header */
+.app-header {
+  background-color: red; /* Red background for the header */
+  padding: 30px; /* Padding for spacing */
+  text-align: center; /* Center the text */
+  color: white; /* White text color for contrast */
+  font-size: 8em; /* Larger font size for the header */
+}
+
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #282c34; 
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,3 +45,4 @@
     transform: rotate(360deg);
   }
 }
+

@@ -1,12 +1,21 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar';
+import './App.css'; // Importing the CSS file for custom styles
 
 function App() {
   return (
     <Router>
       <div className="App">
+        {/* Banner and Header */}
+        <header className="app-header">
+          <h1>StageTrack</h1>
+        </header>
+
         <NavBar />
+
+        {/* Routing to different pages */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
