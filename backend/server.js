@@ -177,6 +177,9 @@ app.delete('/items/:id/advanced', (req, res) => {
   });
 });
 
+const cors = require('cors');
+app.use(cors());
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
