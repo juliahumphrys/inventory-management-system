@@ -7,7 +7,7 @@ const port = 5000;
 app.use(express.json());
 
 // Connect to the SQLite database
-const db = new sqlite3.Database('./theater_inventory.db', (err) => {
+const db = new sqlite3.Database('./act_inventory.db', (err) => {
   if (err) {
     console.error('Could not connect to the database', err);
   } else {
@@ -17,7 +17,7 @@ const db = new sqlite3.Database('./theater_inventory.db', (err) => {
 
 // Create tables if they don't exist
 db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS Item_Info (
+  db.run(`CREATE TABLE IF NOT EXISTS itemInfo (
     itemNumber TEXT PRIMARY KEY,
     itemName TEXT NOT NULL,
     itemCategory TEXT NOT NULL,
@@ -26,26 +26,26 @@ db.serialize(() => {
     itemPicture TEXT
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS Advanced_Item_Info (
+  db.run(`CREATE TABLE IF NOT EXISTS advancedItemInfo (
     itemNumber TEXT PRIMARY KEY,
     itemCost INTEGER NOT NULL,
     itemCondition TEXT NOT NULL,
     itemDescription TEXT NOT NULL,
-    FOREIGN KEY(itemNumber) REFERENCES Item_Info(itemNumber)
+    FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS Historical_Item_Info (
+  db.run(`CREATE TABLE IF NOT EXISTS historicalItemInfo (
     itemNumber TEXT PRIMARY KEY,
     dateLastUsed TEXT NOT NULL,
     showLastUsed TEXT NOT NULL,
-    FOREIGN KEY(itemNumber) REFERENCES Item_Info(itemNumber)
+    FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS Theater_Status (
+  db.run(`CREATE TABLE IF NOT EXISTS theaterStatus (
     itemNumber TEXT PRIMARY KEY,
     rentedOut TEXT NOT NULL,
     locationRented TEXT NOT NULL,
-    FOREIGN KEY(itemNumber) REFERENCES Item_Info(itemNumber)
+    FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
   )`);
 });
 
@@ -53,7 +53,7 @@ db.serialize(() => {
 
 // Fetch all items
 app.get('/items', (req, res) => {
-  const sql = 'SELECT * FROM Item_Info';
+  const sql = 'SELECT * FROM itemInfo';
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -69,7 +69,7 @@ app.get('/items', (req, res) => {
 // Add a new item
 app.post('/items', (req, res) => {
   const { itemNumber, itemName, itemCategory, itemQuantity, itemLocation } = req.body;
-  const sql = 'INSERT INTO Item_Info (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
+  const sql = 'INSERT INTO itemInfo (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
   const params = [itemNumber, itemName, itemCategory, itemQuantity, itemLocation];
 
   db.run(sql, params, (err) => {
@@ -86,7 +86,7 @@ app.post('/items', (req, res) => {
 // Update an item
 app.put('/items/:id', (req, res) => {
   const { itemName, itemCategory, itemQuantity, itemLocation } = req.body;
-  const sql = `UPDATE Item_Info
+  const sql = `UPDATE itemInfo
                SET itemName = ?, itemCategory = ?, itemQuantity = ?, itemLocation = ?
                WHERE itemNumber = ?`;
   const params = [itemName, itemCategory, itemQuantity, itemLocation, req.params.id];
@@ -102,7 +102,7 @@ app.put('/items/:id', (req, res) => {
 
 // Delete an item
 app.delete('/items/:id', (req, res) => {
-  const sql = 'DELETE FROM Item_Info WHERE itemNumber = ?';
+  const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
   const params = [req.params.id];
 
   db.run(sql, params, (err) => {
