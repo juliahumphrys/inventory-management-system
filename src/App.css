@@ -15,7 +15,7 @@
 
 /* New styles for the red banner/header */
 .app-header {
-  background-color: red; /* Red background for the header */
+  background-color: darkgreen; /* Red background for the header */
   padding: 30px; /* Padding for spacing */
   text-align: center; /* Center the text */
   color: white; /* White text color for contrast */
