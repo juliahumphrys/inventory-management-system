@@ -114,8 +114,72 @@ app.delete('/items/:id', (req, res) => {
   });
 });
 
+// Fetch advanced item info
+app.get('/items/:id/advanced', (req, res) => {
+  const sql = 'SELECT * FROM advancedItemInfo WHERE itemNumber = ?';
+  db.get(sql, [req.params.id], (err, row) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: row,
+    });
+  });
+});
+
+// Add advanced item info
+app.post('/items/:id/advanced', (req, res) => {
+  const { itemCost, itemCondition, itemDescription } = req.body;
+  const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
+  const params = [req.params.id, itemCost, itemCondition, itemDescription];
+
+  db.run(sql, params, (err) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'Advanced item info added successfully',
+    });
+  });
+});
+
+// Update advanced item info
+app.put('/items/:id/advanced', (req, res) => {
+  const { itemCost, itemCondition, itemDescription } = req.body;
+  const sql = `UPDATE advancedItemInfo
+               SET itemCost = ?, itemCondition = ?, itemDescription = ?
+               WHERE itemNumber = ?`;
+  const params = [itemCost, itemCondition, itemDescription, req.params.id];
+
+  db.run(sql, params, (err) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({ message: 'Advanced item info updated successfully' });
+  });
+});
+
+// Delete advanced item info
+app.delete('/items/:id/advanced', (req, res) => {
+  const sql = 'DELETE FROM advancedItemInfo WHERE itemNumber = ?';
+  const params = [req.params.id];
+
+  db.run(sql, params, (err) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({ message: 'Advanced item info deleted successfully' });
+  });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
 
