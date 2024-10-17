@@ -104,11 +104,14 @@ function Inventory() {
           onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
         />
 
-
-  <select
-          
-              
-              placeholder="Item Quantity"
+        
+        <input
+          type="text"
+          placeholder="Item Location"
+          value={newItem.itemLocation}
+          onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
+        />
+      <select
                 value={newItem.itemQuantity}
                 onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
          >
@@ -120,15 +123,11 @@ function Inventory() {
 
 </select>
 
-        
-        <input
-          type="text"
-          placeholder="Item Location"
-          value={newItem.itemLocation}
-          onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
-        />
+
         <button onClick={handleAddItem}>Add Item</button>
       </div>
+
+
 
       {/* Inventory List */}
       <div>
