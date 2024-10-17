@@ -96,18 +96,31 @@ function Inventory() {
           value={newItem.itemName}
           onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
         />
+
         <input
           type="text"
           placeholder="Item Category"
           value={newItem.itemCategory}
           onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
         />
-        <input
-          type="text"
-          placeholder="Item Quantity"
-          value={newItem.itemQuantity}
-          onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
-        />
+
+
+  <select
+          
+              
+              placeholder="Item Quantity"
+                value={newItem.itemQuantity}
+                onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
+         >
+              {Array.from({ length: 20 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+  ))}
+
+</select>
+
+        
         <input
           type="text"
           placeholder="Item Location"
