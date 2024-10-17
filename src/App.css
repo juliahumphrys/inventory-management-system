@@ -37,6 +37,23 @@
   color: #61dafb;
 }
 
+.Routes ul{
+  list-style-type: none;
+  background-color: black;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+}
+
+.Routes a{
+  color: white;
+  text-decoration: none;
+  padding: 15px;
+  display: block;
+  text-align: center;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

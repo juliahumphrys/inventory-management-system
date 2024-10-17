@@ -14,9 +14,10 @@ function App() {
       <div className="App">
         {/* Banner and Header */}
         <header className="app-header">
-          <h1>StageTrack</h1>
+          <h1>MyTrackIMS</h1>
         </header>
-
+        
+       
         <NavBar />
 
         {/* Routing to different pages */}
@@ -30,8 +31,9 @@ function App() {
   );
 }
 
+
 function Home() {
-  return <h1>Welcome to the Home Page</h1>;
+  return <h1>Welcome to Aurora Community Theater's Inventory Management System</h1>;
 }
 
 function Inventory() {
