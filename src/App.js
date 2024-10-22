@@ -136,10 +136,7 @@ function Inventory() {
             ))}
           </select>
           <button onClick={handleAddItem}>Add Item</button>
-        </div>
-      )}
-
-      <div>
+          <div>
         <h2>Items in Inventory</h2>
         {items.length > 0 ? (
           <ul>
@@ -154,6 +151,10 @@ function Inventory() {
           <p>No items found.</p>
         )}
       </div>
+        </div>
+      )}
+
+      
     </div>
   );
 }
