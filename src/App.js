@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import './App.css'; 
 import axios from 'axios'; 
+import Developers from './Components/Developers';
+
 
 
 
@@ -25,7 +27,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/reports" element={<Developers Page />} />
+          <Route path="/developers" element={<Developers />} /> 
         </Routes>
       </div>
     </Router>
