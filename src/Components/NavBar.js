@@ -8,6 +8,7 @@ function NavBar() {
       <ul className="navbar-list">
         <li><a href="/">Home</a></li>
         <li><a href="/inventory">Inventory</a></li>
+        <li><a href="/manageInventory">Manage Inventory</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>
     </nav>
