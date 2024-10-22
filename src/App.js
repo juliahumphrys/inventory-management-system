@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import './App.css'; 
 import axios from 'axios'; 
-import Developers from './Components/Developers';
-
 
 
 
@@ -27,7 +25,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/developers" element={<Developers />} /> 
         </Routes>
       </div>
     </Router>
@@ -47,9 +44,9 @@ function Home() {
 
 function Inventory() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemDescription: '' });
-  const [showAddForm, setShowAddForm] = useState(false); // Toggle form visibility
+  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
 
+  // Fetch items from the server when the component loads
   useEffect(() => {
     fetchItems();
   }, []);
@@ -66,18 +63,26 @@ function Inventory() {
   const handleAddItem = async () => {
     try {
       await axios.post('/items', newItem);
-      fetchItems();
-      setNewItem({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemDescription: '' });
-      setShowAddForm(false); // Hide the form after adding the item
+      fetchItems(); // Refresh the list after adding a new item
+      setNewItem({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
     } catch (error) {
       console.error('Error adding item:', error);
+    }
+  };
+
+  const handleUpdateItem = async (itemNumber, updatedItem) => {
+    try {
+      await axios.put(`/items/${itemNumber}`, updatedItem);
+      fetchItems(); // Refresh the list after updating an item
+    } catch (error) {
+      console.error('Error updating item:', error);
     }
   };
 
   const handleDeleteItem = async (itemNumber) => {
     try {
       await axios.delete(`/items/${itemNumber}`);
-      fetchItems();
+      fetchItems(); // Refresh the list after deleting an item
     } catch (error) {
       console.error('Error deleting item:', error);
     }
@@ -96,56 +101,41 @@ function Inventory() {
           value={newItem.itemName}
           onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
         />
-      <button onClick={() => setShowAddForm(!showAddForm)}>
-        {showAddForm ? 'Cancel' : 'Add a New Item'}
-      </button>
 
-      {/* Conditionally render the add item form */}
-      {showAddForm && (
-        <div>
-          <h2>Add a New Item</h2>
-          <input
-            type="text"
-            placeholder="Item Number"
-            value={newItem.itemNumber}
-            onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Item Name"
-            value={newItem.itemName}
-            onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Item Category"
-            value={newItem.itemCategory}
-            onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Item Location"
-            value={newItem.itemLocation}
-            onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Item Description"
-            value={newItem.itemDescription}
-            onChange={(e) => setNewItem({ ...newItem, itemDescription: e.target.value })}
-          />
-          <select
-            value={newItem.itemQuantity}
-            onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
-          >
-            {Array.from({ length: 20 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </select>
-          <button onClick={handleAddItem}>Add Item</button>
-          <div>
+        <input
+          type="text"
+          placeholder="Item Category"
+          value={newItem.itemCategory}
+          onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
+        />
+
+        
+        <input
+          type="text"
+          placeholder="Item Location"
+          value={newItem.itemLocation}
+          onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
+        />
+      <select
+                value={newItem.itemQuantity}
+                onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
+         >
+              {Array.from({ length: 20 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+  ))}
+
+</select>
+
+
+        <button onClick={handleAddItem}>Add Item</button>
+      </div>
+
+
+
+      {/* Inventory List */}
+      <div>
         <h2>Items in Inventory</h2>
         {items.length > 0 ? (
           <ul>
@@ -153,6 +143,7 @@ function Inventory() {
               <li key={item.itemNumber}>
                 <strong>{item.itemName}</strong> - {item.itemCategory} - Quantity: {item.itemQuantity} - Location: {item.itemLocation}
                 <button onClick={() => handleDeleteItem(item.itemNumber)}>Delete</button>
+                {/* You can also implement an update functionality here */}
               </li>
             ))}
           </ul>
@@ -160,10 +151,6 @@ function Inventory() {
           <p>No items found.</p>
         )}
       </div>
-        </div>
-      )}
-
-      
     </div>
   );
 }
