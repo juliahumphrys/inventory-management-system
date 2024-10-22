@@ -47,9 +47,9 @@ function Home() {
 
 function Inventory() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
+  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemDescription: '' });
+  const [showAddForm, setShowAddForm] = useState(false); // Toggle form visibility
 
-  // Fetch items from the server when the component loads
   useEffect(() => {
     fetchItems();
   }, []);
@@ -66,26 +66,18 @@ function Inventory() {
   const handleAddItem = async () => {
     try {
       await axios.post('/items', newItem);
-      fetchItems(); // Refresh the list after adding a new item
-      setNewItem({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
+      fetchItems();
+      setNewItem({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemDescription: '' });
+      setShowAddForm(false); // Hide the form after adding the item
     } catch (error) {
       console.error('Error adding item:', error);
-    }
-  };
-
-  const handleUpdateItem = async (itemNumber, updatedItem) => {
-    try {
-      await axios.put(`/items/${itemNumber}`, updatedItem);
-      fetchItems(); // Refresh the list after updating an item
-    } catch (error) {
-      console.error('Error updating item:', error);
     }
   };
 
   const handleDeleteItem = async (itemNumber) => {
     try {
       await axios.delete(`/items/${itemNumber}`);
-      fetchItems(); // Refresh the list after deleting an item
+      fetchItems();
     } catch (error) {
       console.error('Error deleting item:', error);
     }
@@ -95,62 +87,58 @@ function Inventory() {
     <div>
       <h1>Inventory Page</h1>
 
-      {/* Add New Item Form */}
-      <div>
-        <h2>Add a New Item</h2>
-        <input
-          type="text"
-          placeholder="Item Number"
-          value={newItem.itemNumber}
-          onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Item Name"
-          value={newItem.itemName}
-          onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
-        />
+      <button onClick={() => setShowAddForm(!showAddForm)}>
+        {showAddForm ? 'Cancel' : 'Add a New Item'}
+      </button>
 
-        <input
-          type="text"
-          placeholder="Item Category"
-          value={newItem.itemCategory}
-          onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
-        />
-
-        
-        <input
-          type="text"
-          placeholder="Item Location"
-          value={newItem.itemLocation}
-          onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Item Description"
-          value={(newItem.itemDescription)}
-          onChange={(e) => setNewItem({ ...newItem, itemDescription: e.target.value })}
+      {/* Conditionally render the add item form */}
+      {showAddForm && (
+        <div>
+          <h2>Add a New Item</h2>
+          <input
+            type="text"
+            placeholder="Item Number"
+            value={newItem.itemNumber}
+            onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })}
           />
-      <select
-      
-                value={newItem.itemQuantity}
-                onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
-         >
-              {Array.from({ length: 20 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {i + 1}
-                </option>
-  ))}
+          <input
+            type="text"
+            placeholder="Item Name"
+            value={newItem.itemName}
+            onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Item Category"
+            value={newItem.itemCategory}
+            onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Item Location"
+            value={newItem.itemLocation}
+            onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Item Description"
+            value={newItem.itemDescription}
+            onChange={(e) => setNewItem({ ...newItem, itemDescription: e.target.value })}
+          />
+          <select
+            value={newItem.itemQuantity}
+            onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
+          >
+            {Array.from({ length: 20 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleAddItem}>Add Item</button>
+        </div>
+      )}
 
-</select>
-
-
-        <button onClick={handleAddItem}>Add Item</button>
-      </div>
-
-
-
-      {/* Inventory List */}
       <div>
         <h2>Items in Inventory</h2>
         {items.length > 0 ? (
@@ -159,7 +147,6 @@ function Inventory() {
               <li key={item.itemNumber}>
                 <strong>{item.itemName}</strong> - {item.itemCategory} - Quantity: {item.itemQuantity} - Location: {item.itemLocation}
                 <button onClick={() => handleDeleteItem(item.itemNumber)}>Delete</button>
-                {/* You can also implement an update functionality here */}
               </li>
             ))}
           </ul>
