@@ -122,7 +122,14 @@ function Inventory() {
           value={newItem.itemLocation}
           onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
         />
+        <input
+          type="text"
+          placeholder="Item Description"
+          value={(newItem.itemDescription)}
+          onChange={(e) => setNewItem({ ...newItem, itemDescription: e.target.value })}
+          />
       <select
+      
                 value={newItem.itemQuantity}
                 onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })}
          >
