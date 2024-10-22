@@ -97,12 +97,6 @@ function Inventory() {
         <h2>Add a New Item</h2>
         <input
           type="text"
-          placeholder="Item Number"
-          value={newItem.itemNumber}
-          onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })}
-        />
-        <input
-          type="text"
           placeholder="Item Name"
           value={newItem.itemName}
           onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}

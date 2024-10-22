@@ -3,25 +3,32 @@ import axios from 'axios';
 
 function Inventory() {
   // States to capture form input
-  const [itemNumber, setItemNumber] = useState('');
   const [itemName, setItemName] = useState('');
   const [itemCategory, setItemCategory] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
   const [itemLocation, setItemLocation] = useState('');
   const [message, setMessage] = useState(''); // State for confirmation message
 
+  // Function to randomize the itemNumber for a new item added
+  const generateItemNumber = () => {
+    // Convert the current number to a string and ensure it's 5 digits long (e.g., 00001)
+    const itemNumber = currentItemNumber.toString().padStart(5, '0');
+    setCurrentItemNumber((prevNumber) => prevNumber + 1); // Increment the item number for the next item
+    return itemNumber;
+  };
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
 
     // Validate inputs before sending
-    if (!itemNumber || !itemName || !itemCategory || !itemQuantity || !itemLocation) {
+    if (!itemName || !itemCategory || !itemQuantity || !itemLocation) {
       setMessage('Please fill in all fields.');
       return;
     }
 
     const newItem = {
-      itemNumber,
+      itemNumber: generateItemNumber(),
       itemName,
       itemCategory,
       itemQuantity: parseInt(itemQuantity, 10), // Convert to integer
@@ -34,7 +41,6 @@ function Inventory() {
       console.log(response.data); // Handle the response as needed
       setMessage('Item added successfully!'); // Success message
       // Reset the form
-      setItemNumber('');
       setItemName('');
       setItemCategory('');
       setItemQuantity('');
@@ -54,15 +60,6 @@ function Inventory() {
 
       {/* Inventory Form */}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Item Number:</label>
-          <input
-            type="text"
-            value={itemNumber}
-            onChange={(e) => setItemNumber(e.target.value)}
-            required
-          />
-        </div>
         <div>
           <label>Item Name:</label>
           <input
