@@ -1,15 +1,12 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
-const cors = require('cors');
-
 const app = express();
 const port = 5000;
 
-// Middleware
-app.use(cors());// Enables Cross-Origin Resource Sharing, allowing requests from different origins
+// Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Connect to the SQLite database 
+// Connect to the SQLite database
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
   if (err) {
     console.error('Could not connect to the database', err);
@@ -18,7 +15,7 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
   }
 });
 
-// Create tables if they don't exist 
+// Create tables if they don't exist
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS itemInfo (
     itemNumber TEXT PRIMARY KEY,
@@ -52,16 +49,20 @@ db.serialize(() => {
   )`);
 });
 
-// Routes 
+// Routes
 
-// Fetch all items 
+// Fetch all items
 app.get('/items', (req, res) => {
   const sql = 'SELECT * FROM itemInfo';
   db.all(sql, [], (err, rows) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
-    res.json({ message: 'success', data: rows });
+    res.json({
+      message: 'success',
+      data: rows
+    });
   });
 });
 
@@ -71,11 +72,14 @@ app.post('/items', (req, res) => {
   const sql = 'INSERT INTO itemInfo (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
   const params = [itemNumber, itemName, itemCategory, itemQuantity, itemLocation];
 
-  db.run(sql, params, function (err) {
+  db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
-    res.json({ message: 'Item added successfully', id: this.lastID });
+    res.json({
+      message: 'Item added successfully',
+    });
   });
 });
 
@@ -89,7 +93,8 @@ app.put('/items/:id', (req, res) => {
 
   db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
     res.json({ message: 'Item updated successfully' });
   });
@@ -102,7 +107,8 @@ app.delete('/items/:id', (req, res) => {
 
   db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
     res.json({ message: 'Item deleted successfully' });
   });
@@ -113,9 +119,13 @@ app.get('/items/:id/advanced', (req, res) => {
   const sql = 'SELECT * FROM advancedItemInfo WHERE itemNumber = ?';
   db.get(sql, [req.params.id], (err, row) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
-    res.json({ message: 'success', data: row });
+    res.json({
+      message: 'success',
+      data: row,
+    });
   });
 });
 
@@ -125,11 +135,14 @@ app.post('/items/:id/advanced', (req, res) => {
   const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
   const params = [req.params.id, itemCost, itemCondition, itemDescription];
 
-  db.run(sql, params, function (err) {
+  db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
-    res.json({ message: 'Advanced item info added successfully', id: this.lastID });
+    res.json({
+      message: 'Advanced item info added successfully',
+    });
   });
 });
 
@@ -143,7 +156,8 @@ app.put('/items/:id/advanced', (req, res) => {
 
   db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
     res.json({ message: 'Advanced item info updated successfully' });
   });
@@ -156,11 +170,15 @@ app.delete('/items/:id/advanced', (req, res) => {
 
   db.run(sql, params, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+      return;
     }
     res.json({ message: 'Advanced item info deleted successfully' });
   });
 });
+
+const cors = require('cors');
+app.use(cors());
 
 // Start the server
 app.listen(port, () => {
