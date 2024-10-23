@@ -26,7 +26,7 @@
     font-size: 1.2em;
   }
   
-  /* Hover effect for links */
+
   .navbar-list li a:hover {
     text-decoration: underline; /* Underlines the link on hover */
   }
