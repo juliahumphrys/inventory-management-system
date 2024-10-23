@@ -1,39 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar';
-import './App.css'; 
-import axios from 'axios'; 
-import Developers from './Components/Developers';
-
-
-
+import Home from './Components/Home';
+import Inventory from './Components/Inventory';
+import Reports from './Components/Reports';
+import './App.css';
 
 function App() {
-  
   return (
     <Router>
       <div className="App">
-        {/* Banner and Header */}
         <header className="app-header">
           <h1>MyTrackIMS</h1>
         </header>
-        
-       
         <NavBar />
-
-        {/* Routing to different pages */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/developers" element={<Developers />} /> 
+          <Route path="/developers" element={<Developers />} />
         </Routes>
       </div>
     </Router>
   );
 }
 
+export default App;
+
+
+  ////////
 
 function Home() {
   return (
