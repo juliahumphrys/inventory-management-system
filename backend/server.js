@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path'); // For handling paths
 
 const app = express();
-const port = 5000;
+const port = 3000;
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
@@ -64,7 +64,7 @@ db.serialize(() => {
 
   db.run(`CREATE TABLE IF NOT EXISTS advancedItemInfo (
     itemNumber TEXT PRIMARY KEY,
-    itemCost REAL NOT NULL, // Changed to REAL for decimal support
+    itemCost REAL NOT NULL, /* Changed to REAL for decimal support */
     itemCondition TEXT NOT NULL,
     itemDescription TEXT NOT NULL,
     FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
