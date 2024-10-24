@@ -1,12 +1,13 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const path = require('path'); // For handling paths
 
 const app = express();
 const port = 5000;
 
 // Middleware
-app.use(cors());// Enables Cross-Origin Resource Sharing, allowing requests from different origins
+app.use(cors()); // Enables Cross-Origin Resource Sharing
 app.use(express.json());
 
 // Connect to the SQLite database 
@@ -15,6 +16,38 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
     console.error('Could not connect to the database', err);
   } else {
     console.log('Connected to the SQLite database');
+
+    // Test the connection and create a test table
+    db.serialize(() => {
+      db.run(`CREATE TABLE IF NOT EXISTS testConnection (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL
+      )`, (err) => {
+        if (err) {
+          console.error('Error creating test table:', err);
+        } else {
+          console.log('Test table created or already exists');
+        }
+      });
+
+      // Insert test data
+      db.run(`INSERT INTO testConnection (name) VALUES (?)`, ['Test Name'], function (err) {
+        if (err) {
+          console.error('Error inserting test data:', err);
+        } else {
+          console.log('Test data inserted with id:', this.lastID);
+        }
+      });
+
+      // Fetch test data
+      db.all(`SELECT * FROM testConnection`, [], (err, rows) => {
+        if (err) {
+          console.error('Error fetching test data:', err);
+        } else {
+          console.log('Test data fetched:', rows);
+        }
+      });
+    });
   }
 });
 
@@ -31,7 +64,7 @@ db.serialize(() => {
 
   db.run(`CREATE TABLE IF NOT EXISTS advancedItemInfo (
     itemNumber TEXT PRIMARY KEY,
-    itemCost INTEGER NOT NULL,
+    itemCost REAL NOT NULL, // Changed to REAL for decimal support
     itemCondition TEXT NOT NULL,
     itemDescription TEXT NOT NULL,
     FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
@@ -70,6 +103,8 @@ app.post('/items', (req, res) => {
   const { itemNumber, itemName, itemCategory, itemQuantity, itemLocation } = req.body;
   const sql = 'INSERT INTO itemInfo (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
   const params = [itemNumber, itemName, itemCategory, itemQuantity, itemLocation];
+
+  console.log("Adding item:", params); // Log the item being added
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -125,6 +160,8 @@ app.post('/items/:id/advanced', (req, res) => {
   const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
   const params = [req.params.id, itemCost, itemCondition, itemDescription];
 
+  console.log("Adding advanced item info:", params); // Log the advanced item info being added
+
   db.run(sql, params, function (err) {
     if (err) {
       return res.status(400).json({ error: err.message });
@@ -166,5 +203,3 @@ app.delete('/items/:id/advanced', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
