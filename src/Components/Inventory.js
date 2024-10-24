@@ -153,13 +153,16 @@ function Inventory() {
             <option value="Category B">Category B</option>
           </select>
 
-          <input
-            type="text"
-            placeholder="Item Location"
+          <select
             value={newItem.itemLocation}
             onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })}
             required
-          />
+          >
+            <option value="" disabled>Select Item Location</option>
+            <option value="Backstage">Backstage</option>
+            <option value="Control Booth">Control Booth</option>
+            <option value="Storage Unit">Storage Unit</option>
+          </select>
           <input
             type="number"
             placeholder="Item Quantity"
