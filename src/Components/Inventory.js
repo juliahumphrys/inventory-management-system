@@ -211,8 +211,22 @@ function Inventory() {
           {/* Advanced Item Info Form */}
           <h3>Advanced Item Info</h3>
             <input type="text" placeholder="Item Cost" value={newAdvancedItem.itemCost} onChange={handleCostInputChange} required />
-            <input type="text" placeholder="Item Condition" value={newAdvancedItem.itemCondition} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })} required />
+            <select
+                value={newAdvancedItem.itemCondition}
+                onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })}
+                required
+              >
+                <option value="" disabled>Select Item Condition</option>
+                <option value="New">New</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Used">Used</option>
+                <option value="Fair">Fair</option>
+                <option value="Bad">Bad</option>
+                <option value="Disposed">Disposed</option>
+                </select>
             <textarea placeholder="Item Description" value={newAdvancedItem.itemDescription} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemDescription: e.target.value })} required> </textarea>
+
 
           {/* Historical Item Info Form */}
           <h3>Historical Item Info</h3>
@@ -229,7 +243,7 @@ function Inventory() {
           {newItem.isRented === 'Yes' && (
             <input type="text" placeholder="Theater Name" value={newItem.theaterName} onChange={(e) => setNewItem({ ...newItem, theaterName: e.target.value })} />
           )}
-          
+
           {/* Add Item Button */}
           <div style={{ marginTop: '20px' }}>
             <button type="button" onClick={handleAddItem} style={{ margin: '20px 0', padding: '10px 20px' }}>
