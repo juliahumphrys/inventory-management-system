@@ -11,6 +11,7 @@ function NavBar() {
         <li><a href="/inventory">Inventory</a></li>
         <li><a href="/reports">Reports</a></li>
         <li><a href="/developers">Developers Page</a></li>
+        <li><a href="/Administrators">Administrators</a></li>
       </ul>
     </nav>
   );

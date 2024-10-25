@@ -83,6 +83,12 @@ db.serialize(() => {
     locationRented TEXT NOT NULL,
     FOREIGN KEY(itemNumber) REFERENCES itemInfo(itemNumber)
   )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS adminAccounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+  )`);
 });
 
 // Routes 

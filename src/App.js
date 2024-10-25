@@ -6,6 +6,7 @@ import Home from './Components/Home';
 import Inventory from './Components/Inventory';
 import Developers from './Components/Developers';
 import './App.css';
+import AdminPage from './Components/AdminPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/Developers" element={<Developers />} />
+          <Route path="/Administrators" element={<AdminPage />} />
         </Routes>
       </div>
     </Router>
