@@ -89,26 +89,7 @@ db.serialize(() => {
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL
   )`);
-
-  const username = 'testUser'
-  const password = 'password123'
-
-  db.run(
-    `INSERT OR IGNORE INTO adminAccounts (username, password) VALUES (?, ?)`,
-    [username, password],
-    function (err) {
-      if (err) {
-        console.error('Error adding test user:', err.message);
-      } else {
-        console.log('Test user added with username:', username);
-      }
-    }
-  );
 });
-
-
-
-
 
 // Routes 
 
@@ -122,9 +103,6 @@ app.get('/items', (req, res) => {
     res.json({ message: 'success', data: rows });
   });
 });
-
-const username = 'testUser'
-const password = 'password123'
 
 // Add a new item
 app.post('/items', (req, res) => {
@@ -242,42 +220,6 @@ app.post('/items/:id/historical', (req, res) => {
     res.json({ message: 'Historical item info added successfully', id: this.lastID });
   });
 });
-
-// Admin Accounts
-app.post('/create-admin', (req, res) => {
-  const { username, password } = req.body;
-
-  db.run(
-    'INSERT INTO adminAccounts (username, password) VALUES (?, ?)',
-    [username, password],
-    function (err) {
-      if (err) {
-        return res.status(400).json({ error: "Error creating admin account or username already exists" });
-      }
-      res.status(201).json({ message: "Admin account created successfully" });
-    }
-  );
-});
-
-app.post('/admin-login', (req, res) => {
-  const { username, password } = req.body;
-
-  db.get(
-    `SELECT * FROM adminAccounts WHERE username = ? AND password = ?`,
-    [username, password],
-    (err, row) => {
-      if (err) {
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      if (!row) {
-        return res.status(401).json({ error: "Invalid username or password" });
-      }
-      // Authentication successful
-      res.status(200).json({ message: "Login successful" });
-    }
-  );
-});
-
 
 
 // Start the server
