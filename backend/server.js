@@ -199,6 +199,23 @@ app.delete('/items/:id/advanced', (req, res) => {
   });
 });
 
+// Add historical item info
+app.post('/items/:id/historical', (req, res) => {
+  const { dateLastUsed, showLastUsed } = req.body;
+  const sql = 'INSERT INTO historicalItemInfo (itemNumber, dateLastUsed, showLastUsed) VALUES (?, ?, ?)';
+  const params = [req.params.id, dateLastUsed, showLastUsed];
+
+  console.log("Adding historical item info:", params); // Log the historical item info being added
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.json({ message: 'Historical item info added successfully', id: this.lastID });
+  });
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

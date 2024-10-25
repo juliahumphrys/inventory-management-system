@@ -5,11 +5,13 @@ function Inventory() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
+  const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: false });
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false); // Control form visibility
   const [showAdvancedForm, setShowAdvancedForm] = useState(false); // Control advanced form visibility
+  const [showHistoricalForm, setShowHistoricalForm] = useState(false);
 
   useEffect(() => {
     fetchItems();
@@ -65,6 +67,7 @@ function Inventory() {
       resetForm();
       setShowAddForm(false); // Hide form after submission
       setShowAdvancedForm(false); // Hide advanced form as well
+      setShowHistoricalForm(false);
     } catch (error) {
       console.error('Error adding/updating item:', error);
     }
@@ -110,6 +113,11 @@ function Inventory() {
     if (regex.test(value)) {
       setNewAdvancedItem({ ...newAdvancedItem, itemCost: value });
     }
+  };
+
+  const handleHistoricalInputChange = (e) => {
+    const { name, value } = e.target;
+    setHistoricalItemInfo({ ...historicalItemInfo, [name]: value });
   };
 
   return (
@@ -256,6 +264,39 @@ function Inventory() {
             </div>
           )}
 
+          {/* Historical Item Info Form */}
+          <button type="button" onClick={() => setShowHistoricalForm(!showHistoricalForm)}>
+            {showHistoricalForm ? 'Hide Historical Info' : 'Add Historical Item Info'}
+          </button>
+
+          {showHistoricalForm && (
+  <div>
+    <h2>Historical Item Info</h2>
+    <input
+      type="text"
+      name="itemNumber"
+      placeholder="Item Number"
+      value={historicalItemInfo.itemNumber}
+      onChange={handleHistoricalInputChange}
+      required
+    />
+    <input
+      type="date"
+      name="dateLastUsed"
+      value={historicalItemInfo.dateLastUsed}
+      onChange={handleHistoricalInputChange}
+    />
+    <input
+      type="text" // Text input for "Show Last Used"
+      name="showLastUsed"
+      placeholder="Enter Show Last Used" // Updated placeholder
+      value={historicalItemInfo.showLastUsed} // Bind to historicalItemInfo.showLastUsed
+      onChange={(e) => setHistoricalItemInfo({ ...historicalItemInfo, showLastUsed: e.target.value })} // Handle input change
+    />
+
+            </div>
+          )}
+
           {/* Add Item Button */}
           <div style={{ marginTop: '20px' }}>
             <button type="button" onClick={handleAddItem} style={{ margin: '20px 0', padding: '10px 20px' }}>
@@ -286,4 +327,3 @@ function Inventory() {
 }
 
 export default Inventory;
-
