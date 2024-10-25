@@ -5,7 +5,7 @@ function Inventory() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
-  const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: false });
+  const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -125,32 +125,19 @@ function Inventory() {
       <h1>Inventory Page</h1>
 
       {/* Button to show/hide the regular form */}
-      <button onClick={() => {
-        setShowAddForm(!showAddForm);
-        if (!showAddForm) setShowAdvancedForm(false); // Reset advanced form visibility if hiding the add form
-      }}>
+      <button onClick={() => setShowAddForm(!showAddForm)}>
         {showAddForm ? 'Hide Form' : 'Add New Item'}
       </button>
 
-      {/* Regular Item Form */}
+      {/* Full Item Form */}
       {showAddForm && (
         <form>
           <h2>{editMode ? 'Edit Item' : 'Add a New Item'}</h2>
           {error && <p style={{ color: 'red' }}>{error}</p>}
-          <input
-            type="text"
-            placeholder="Item Number"
-            value={newItem.itemNumber}
-            onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Item Name"
-            value={newItem.itemName}
-            onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
-            required
-          />
+
+          {/* Basic Item Information */}
+          <input type="text" placeholder="Item Number" value={newItem.itemNumber} onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })} required />
+          <input type="text" placeholder="Item Name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
           <select
             value={newItem.itemCategory}
             onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
@@ -171,7 +158,6 @@ function Inventory() {
             <option value="Holiday">Holiday</option>
             <option value="Miscellaneous">Miscellaneous</option>
             <option value="Foam">Lighting</option>
-
           </select>
 
           <select
@@ -223,80 +209,27 @@ function Inventory() {
           />
 
           {/* Advanced Item Info Form */}
-          {showAddForm && (
-            <>
-              <button onClick={() => setShowAdvancedForm(!showAdvancedForm)}>
-                {showAdvancedForm ? 'Hide Advanced Form' : 'Add Advanced Item Info'}
-              </button>
-            </>
-          )}
-
-          {showAdvancedForm && (
-            <div>
-              <h2>Advanced Item Info</h2>
-              <input
-                type="text"
-                placeholder="Item Number"
-                value={newAdvancedItem.itemNumber}
-                onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemNumber: e.target.value })}
-                required
-              />
-              <input
-                type="text"
-                placeholder="Item Cost"
-                value={newAdvancedItem.itemCost}
-                onChange={handleCostInputChange}
-                required
-              />
-              <input
-                type="text"
-                placeholder="Item Condition"
-                value={newAdvancedItem.itemCondition}
-                onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })}
-                required
-              />
-              <textarea
-                placeholder="Item Description"
-                value={newAdvancedItem.itemDescription}
-                onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemDescription: e.target.value })}
-                required
-              ></textarea>
-            </div>
-          )}
+          <h3>Advanced Item Info</h3>
+            <input type="text" placeholder="Item Cost" value={newAdvancedItem.itemCost} onChange={handleCostInputChange} required />
+            <input type="text" placeholder="Item Condition" value={newAdvancedItem.itemCondition} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })} required />
+            <textarea placeholder="Item Description" value={newAdvancedItem.itemDescription} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemDescription: e.target.value })} required> </textarea>
 
           {/* Historical Item Info Form */}
-          <button type="button" onClick={() => setShowHistoricalForm(!showHistoricalForm)}>
-            {showHistoricalForm ? 'Hide Historical Info' : 'Add Historical Item Info'}
-          </button>
+          <h3>Historical Item Info</h3>
+            <input type="date" name="dateLastUsed" value={historicalItemInfo.dateLastUsed} onChange={handleHistoricalInputChange} />
+            <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={historicalItemInfo.showLastUsed} onChange={(e) => setHistoricalItemInfo({ ...historicalItemInfo, showLastUsed: e.target.value })} />
 
-          {showHistoricalForm && (
-  <div>
-    <h2>Historical Item Info</h2>
-    <input
-      type="text"
-      name="itemNumber"
-      placeholder="Item Number"
-      value={historicalItemInfo.itemNumber}
-      onChange={handleHistoricalInputChange}
-      required
-    />
-    <input
-      type="date"
-      name="dateLastUsed"
-      value={historicalItemInfo.dateLastUsed}
-      onChange={handleHistoricalInputChange}
-    />
-    <input
-      type="text" // Text input for "Show Last Used"
-      name="showLastUsed"
-      placeholder="Enter Show Last Used" // Updated placeholder
-      value={historicalItemInfo.showLastUsed} // Bind to historicalItemInfo.showLastUsed
-      onChange={(e) => setHistoricalItemInfo({ ...historicalItemInfo, showLastUsed: e.target.value })} // Handle input change
-    />
-
-            </div>
+          {/* Theater Status Form */}
+          <h3>Theater Status</h3>
+          <select value={newItem.isRented} onChange={(e) => setNewItem({ ...newItem, isRented: e.target.value })}>
+            <option value="" disabled>Is it rented?</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          {newItem.isRented === 'Yes' && (
+            <input type="text" placeholder="Theater Name" value={newItem.theaterName} onChange={(e) => setNewItem({ ...newItem, theaterName: e.target.value })} />
           )}
-
+          
           {/* Add Item Button */}
           <div style={{ marginTop: '20px' }}>
             <button type="button" onClick={handleAddItem} style={{ margin: '20px 0', padding: '10px 20px' }}>
