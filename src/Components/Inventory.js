@@ -240,13 +240,20 @@ function Inventory() {
                 onChange={handleCostInputChange}
                 required
               />
-              <input
-                type="text"
-                placeholder="Item Condition"
+              <select
                 value={newAdvancedItem.itemCondition}
                 onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })}
                 required
-              />
+              >
+                <option value="" disabled>Select Item Condition</option>
+                <option value="New">New</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Used">Used</option>
+                <option value="Fair">Fair</option>
+                <option value="Bad">Bad</option>
+                <option value="Disposed">Disposed</option>
+                </select>
               <textarea
                 placeholder="Item Description"
                 value={newAdvancedItem.itemDescription}
