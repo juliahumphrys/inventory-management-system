@@ -4,7 +4,6 @@
     padding: 10px;
     text-align: center;
   }
-  
   /* Navigation list - horizontal layout */
   .navbar-list {
     list-style: none;
@@ -30,3 +29,46 @@
   .navbar-list li a:hover {
     text-decoration: underline; /* Underlines the link on hover */
   }
+
+  /* src/components/NavBar.css */
+
+
+.navbar-list {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.navbar-list a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-search-input {
+  width: 300px;
+  padding: 8px;
+  font-size: 1em;
+  border: none;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+
+.navbar-search-button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.navbar-search-button:hover {
+  background-color: #777;
+}
+

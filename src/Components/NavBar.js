@@ -4,6 +4,21 @@ import './NavBar.css';
 import { Link } from 'react-router-dom';
 
 function NavBar() {
+  const [query, setQuery] = useState('');
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    if (query) {
+      try {
+        const response = await fetch(`/api/search?assetTag=${encodeURIComponent(query)}`);
+        const result = await response.json();
+        console.log(result); // To see results in console; replace with code to display on UI
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    }
+  };
+  
   return (
     <nav className="navbar">
       <ul className="navbar-list">
