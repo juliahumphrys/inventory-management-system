@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function Inventory() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '' });
+  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemImage: '' });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
   const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
   const [error, setError] = useState('');
@@ -72,7 +72,19 @@ function Inventory() {
       console.error('Error adding/updating item:', error);
     }
   };
-
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+  
+    reader.onloadend = () => {
+      setNewItem({ ...newItem, itemImage: reader.result }); // Save base64 string
+    };
+  
+    if (file) {
+      reader.readAsDataURL(file); // Convert image to base64 string
+    }
+  };
+  
   const handleUpdateItem = async (itemNumber, updatedItem) => {
     try {
       await axios.put(`/items/${itemNumber}`, updatedItem);
@@ -138,6 +150,11 @@ function Inventory() {
           {/* Basic Item Information */}
           <input type="text" placeholder="Item Number" value={newItem.itemNumber} onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })} required />
           <input type="text" placeholder="Item Name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={(e) => setNewItem({ ...newItem, itemImage: e.target.files[0] })} 
+          />
           <select
             value={newItem.itemCategory}
             onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
