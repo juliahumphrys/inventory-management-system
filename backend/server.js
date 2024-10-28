@@ -8,7 +8,6 @@ const port = 3000;
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.static('public'));
 app.use(express.json());
 
 // Connect to the SQLite database 
@@ -221,19 +220,7 @@ app.post('/items/:id/historical', (req, res) => {
     res.json({ message: 'Historical item info added successfully', id: this.lastID });
   });
 });
-app.get('/api/search', (req, res) => {
-  const assetTag = req.query.assetTag;
-  const sql = `SELECT * FROM items WHERE asset_tag_id = ?`;
-  db.get(sql, [itemNumber], (err, row) => {
-      if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-      }
-      res.json(row ? row : { message: "No item found with that asset tag ID" });
-  });
-});
 
-const PORT = process.env.PORT || 3000;
 
 // Start the server
 app.listen(port, () => {
