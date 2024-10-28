@@ -6,7 +6,6 @@ const path = require('path'); // For handling paths
 const app = express();
 const port = 3000;
 
-
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
 app.use(express.json());
