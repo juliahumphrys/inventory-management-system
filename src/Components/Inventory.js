@@ -144,7 +144,7 @@ function Inventory() {
       {/* Full Item Form */}
       {showAddForm && (
         <form>
-          <h2>{editMode ? 'Edit Item' : 'Add a New Item'}</h2>
+          <h5>{editMode ? 'Edit Item' : 'Add a New Item'}</h5>
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
           {/* Basic Item Information */}
@@ -226,7 +226,6 @@ function Inventory() {
           />
 
           {/* Advanced Item Info Form */}
-          <h3>Advanced Item Info</h3>
             <input type="text" placeholder="Item Cost" value={newAdvancedItem.itemCost} onChange={handleCostInputChange} required />
             <select
                 value={newAdvancedItem.itemCondition}
@@ -246,12 +245,11 @@ function Inventory() {
 
 
           {/* Historical Item Info Form */}
-          <h3>Historical Item Info</h3>
             <input type="date" name="dateLastUsed" value={historicalItemInfo.dateLastUsed} onChange={handleHistoricalInputChange} />
             <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={historicalItemInfo.showLastUsed} onChange={(e) => setHistoricalItemInfo({ ...historicalItemInfo, showLastUsed: e.target.value })} />
 
           {/* Theater Status Form */}
-          <h3>Theater Status</h3>
+          <p>Is the item rented out to another location?</p>
           <select value={newItem.isRented} onChange={(e) => setNewItem({ ...newItem, isRented: e.target.value })}>
             <option value="" disabled>Is it rented?</option>
             <option value="Yes">Yes</option>

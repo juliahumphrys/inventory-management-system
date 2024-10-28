@@ -18,6 +18,7 @@ function NavBar() {
       }
     }
   };
+  
 
   return (
     <nav className="navbar">
