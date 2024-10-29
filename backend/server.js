@@ -4,10 +4,10 @@ const cors = require('cors');
 const path = require('path'); // For handling paths
 
 const app = express();
-const port = 3000;
-
+const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
+app.use(express.static('public'));
 app.use(express.json());
 
 // Connect to the SQLite database 
@@ -221,6 +221,18 @@ app.post('/items/:id/historical', (req, res) => {
   });
 });
 
+app.get('/api/search', (req, res) => {
+  const itemNumber = req.query.itemNumber; // Get the itemNumber from query parameters
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`; // SQL query
+
+  db.get(sql, [itemNumber], (err, row) => { // Execute the query
+    if (err) {
+      res.status(500).json({ error: err.message }); // Handle error
+      return;
+    }
+    res.json(row ? row : { message: "No item found with that item number" }); // Send response
+  });
+});
 
 // Start the server
 app.listen(port, () => {
