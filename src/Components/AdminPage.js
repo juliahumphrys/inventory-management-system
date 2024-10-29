@@ -8,7 +8,7 @@ const AdminPage = () => {
     <div>
       <h1>Admin Page</h1>
       <AdminLogin />
-      {/* Additional admin dashboard content can go here */}
+      { }
     </div>
   );
 };
