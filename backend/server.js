@@ -3,6 +3,8 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path'); // For handling paths
 
+const dbPath = path.join(backend, 'act_inventory.db');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Middleware
@@ -221,16 +223,20 @@ app.post('/items/:id/historical', (req, res) => {
   });
 });
 
-app.get('/api/search', (req, res) => {
-  const itemNumber = req.query.itemNumber; // Get the itemNumber from query parameters
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`; // SQL query
+app.get('/items', (req, res) => {
+  const itemNumber = req.query.itemNumber;
 
-  db.get(sql, [itemNumber], (err, row) => { // Execute the query
+  if (!itemNumber) {
+    return res.status(400).json({ error: "itemNumber parameter is required" });
+  }
+
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+
+  db.get(sql, [itemNumber], (err, row) => {
     if (err) {
-      res.status(500).json({ error: err.message }); // Handle error
-      return;
+      return res.status(500).json({ error: err.message });
     }
-    res.json(row ? row : { message: "No item found with that item number" }); // Send response
+    res.json(row ? row : { message: "No item found with that item number" });
   });
 });
 

@@ -42,7 +42,9 @@ function NavBar() {
           onChange={(e) => setQuery(e.target.value)}
           className="navbar-search-input"
         />
-        <button type="submit" className="navbar-search-button">🔍</button>
+        <button type="submit" className="navbar-search-button">
+          <span role="img" aria-label="search">🔍</span>    
+        </button>
       </form>
       
       {/* Render search results */}
