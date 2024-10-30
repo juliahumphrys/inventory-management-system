@@ -151,11 +151,27 @@ function Inventory() {
           {/* Basic Item Information */}
           <input type="text" placeholder="Item Number" value={newItem.itemNumber} onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })} required />
           <input type="text" placeholder="Item Name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={(e) => setNewItem({ ...newItem, itemImage: e.target.files[0] })} 
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setNewItem({
+              ...newItem,
+              itemImage: file,
+              itemImagePreview: URL.createObjectURL(file), // Add a preview URL
+            });
+           }}
           />
+          {newItem.itemImagePreview && (
+           <img
+              src={newItem.itemImagePreview}
+              alt="Item Preview"
+              style={{ maxWidth: "200px", maxHeight: "200px" }}
+            />
+          )}
+
+
           <select
             value={newItem.itemCategory}
             onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })}
