@@ -12,23 +12,18 @@ function Inventory() {
   const [showAddForm, setShowAddForm] = useState(false); // Control form visibility
   const [showAdvancedForm, setShowAdvancedForm] = useState(false); // Control advanced form visibility
   const [showHistoricalForm, setShowHistoricalForm] = useState(false);
-  
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    setIsSubmitted(true);
 
     const updatedItems = [...items, newItem];
     setItems(updatedItems);
 
     //Stores updated list in localStorage
     localStorage.setItem('items', JSON.stringify(updatedItems));
-
-    useEffect(() => {
-      const savedItems = localStorage.getItem('items');
-      if (savedItems) {
-        setItems(JSON.parse(savedItems));
-      }
-    }, []);
 
     // Store the new item
     setItems([...items, newItem]);
@@ -42,10 +37,6 @@ function Inventory() {
       itemImage: null,
     });
   };
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
 
   const fetchItems = async () => {
     try {
@@ -82,10 +73,10 @@ function Inventory() {
   const handleAddItem = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    console.log("Basic Item Info:", newItem); //Should be logging basic item info
-    console.log("Advanced Item Info:", newAdvancedItem); //Should be logging advanced item info lol
-
+  
+    console.log("Basic Item Info:", newItem);
+    console.log("Advanced Item Info:", newAdvancedItem);
+  
     try {
       if (editMode) {
         await handleUpdateItem(currentItem.itemNumber, newItem);
@@ -95,14 +86,13 @@ function Inventory() {
       }
       fetchItems();
       resetForm();
-      setShowAddForm(false); // Hide form after submission
-      setShowAdvancedForm(false); // Hide advanced form as well
+      setShowAddForm(false);
+      setShowAdvancedForm(false);
       setShowHistoricalForm(false);
     } catch (error) {
       console.error('Error adding/updating item:', error);
     }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -182,17 +172,26 @@ function Inventory() {
           <input type="text" placeholder="Item Number" value={newItem.itemNumber} onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })} required />
           <input type="text" placeholder="Item Name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
           <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              setNewItem({
-              ...newItem,
-              itemImage: file,
-              itemImagePreview: URL.createObjectURL(file), // Add a preview URL
-            });
-           }}
-          />
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewItem({ ...newItem, itemImage: reader.result });
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }}
+/>
+{newItem.itemImage && (
+  <img
+    src={newItem.itemImage}
+    alt="Item Preview"
+    style={{ maxWidth: '200px', maxHeight: '200px' }}
+  />
+)}
           {newItem.itemImagePreview && (
            <img
               src={newItem.itemImagePreview}
@@ -316,29 +315,29 @@ function Inventory() {
       )}
 
       
-  <div>
-    <h2>Inventory Items</h2>
-    {items.length > 0 ? (
-      items.map((item, index) => (
-        <div key={index}>
-          <h3>{item.itemName}</h3>
-          <p>Item Number: {item.itemNumber}</p>
-          <p>Category: {item.itemCategory}</p>
-          <p>Quantity: {item.itemQuantity}</p>
-          <p>Location: {item.itemLocation}</p>
-          {item.itemImage && (
-            <img
-              src={URL.createObjectURL(item.itemImage)}
-              alt={item.itemName}
-              style={{ width: '200px', height: 'auto' }}
-            />
-          )}
-        </div>
-      ))
-    ) : (
-      <p>No items found</p>
-    )}
-  </div>
+<div>
+  <h2>Inventory Items</h2>
+  {items.length > 0 ? (
+    items.map((item, index) => (
+      <div key={index}>
+        <h3>{item.itemName}</h3>
+        <p>Item Number: {item.itemNumber}</p>
+        <p>Category: {item.itemCategory}</p>
+        <p>Quantity: {item.itemQuantity}</p>
+        <p>Location: {item.itemLocation}</p>
+        {item.itemImage && (
+          <img
+            src={item.itemImage}
+            alt={item.itemName}
+            style={{ width: '200px', height: 'auto' }}
+          />
+        )}
+      </div>
+    ))
+  ) : (
+    <p>No items found</p>
+  )}
+</div>
 </div>
 )
 }
