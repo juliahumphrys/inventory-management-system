@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function Inventory() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemImage: '' });
+  const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemImage: null, });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
   const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
   const [error, setError] = useState('');
@@ -12,6 +12,36 @@ function Inventory() {
   const [showAddForm, setShowAddForm] = useState(false); // Control form visibility
   const [showAdvancedForm, setShowAdvancedForm] = useState(false); // Control advanced form visibility
   const [showHistoricalForm, setShowHistoricalForm] = useState(false);
+  
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const updatedItems = [...items, newItem];
+    setItems(updatedItems);
+
+    //Stores updated list in localStorage
+    localStorage.setItem('items', JSON.stringify(updatedItems));
+
+    useEffect(() => {
+      const savedItems = localStorage.getItem('items');
+      if (savedItems) {
+        setItems(JSON.parse(savedItems));
+      }
+    }, []);
+
+    // Store the new item
+    setItems([...items, newItem]);
+    // Clears the form
+    setNewItem({
+      itemNumber: '',
+      itemName: '',
+      itemCategory: '',
+      itemQuantity: '',
+      itemLocation: '',
+      itemImage: null,
+    });
+  };
 
   useEffect(() => {
     fetchItems();
@@ -285,24 +315,32 @@ function Inventory() {
         </form>
       )}
 
-      <div>
-        <h2>Items in Inventory</h2>
-        {items.length > 0 ? (
-          <ul>
-            {items.map((item) => (
-              <li key={item.itemNumber}>
-                <strong>{item.itemName}</strong> - {item.itemCategory} - Quantity: {item.itemQuantity} - Location: {item.itemLocation}
-                <button onClick={() => startEditItem(item)}>Edit</button>
-                <button onClick={() => handleDeleteItem(item.itemNumber)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No items found.</p>
-        )}
-      </div>
-    </div>
-  );
+      
+  <div>
+    <h2>Inventory Items</h2>
+    {items.length > 0 ? (
+      items.map((item, index) => (
+        <div key={index}>
+          <h3>{item.itemName}</h3>
+          <p>Item Number: {item.itemNumber}</p>
+          <p>Category: {item.itemCategory}</p>
+          <p>Quantity: {item.itemQuantity}</p>
+          <p>Location: {item.itemLocation}</p>
+          {item.itemImage && (
+            <img
+              src={URL.createObjectURL(item.itemImage)}
+              alt={item.itemName}
+              style={{ width: '200px', height: 'auto' }}
+            />
+          )}
+        </div>
+      ))
+    ) : (
+      <p>No items found</p>
+    )}
+  </div>
+</div>
+)
 }
 
 export default Inventory;
