@@ -2,9 +2,13 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path'); // For handling paths
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000;
+
+app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
