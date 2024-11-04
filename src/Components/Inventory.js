@@ -316,7 +316,7 @@ function Inventory() {
 
       
 <div>
-  <h2>Inventory Items</h2>
+<h2>Inventory Items</h2>
   {items.length > 0 ? (
     items.map((item, index) => (
       <div key={index}>
@@ -325,9 +325,10 @@ function Inventory() {
         <p>Category: {item.itemCategory}</p>
         <p>Quantity: {item.itemQuantity}</p>
         <p>Location: {item.itemLocation}</p>
+        
         {item.itemImage && (
           <img
-            src={item.itemImage}
+            src={`http://localhost:5000/${item.itemImage}`} // Adjust this URL if your backend server or image path is different
             alt={item.itemName}
             style={{ width: '200px', height: 'auto' }}
           />
@@ -335,7 +336,7 @@ function Inventory() {
       </div>
     ))
   ) : (
-    <p>No items found</p>
+    <p>No items found.</p>
   )}
 </div>
 </div>

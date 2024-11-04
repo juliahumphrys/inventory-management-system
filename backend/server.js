@@ -9,6 +9,7 @@ const port = 3000;
 
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
