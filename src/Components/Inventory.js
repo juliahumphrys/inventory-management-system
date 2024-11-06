@@ -326,9 +326,9 @@ function Inventory() {
         <p>Quantity: {item.itemQuantity}</p>
         <p>Location: {item.itemLocation}</p>
         
-        {item.itemImage && (
+        {item.itemPicture && (
           <img
-            src={`http://localhost:5000/${item.itemImage}`} // Adjust this URL if your backend server or image path is different
+            src={`http://localhost:3000/${item.itemPicture}`} // Adjust this URL if your backend server or image path is different 
             alt={item.itemName}
             style={{ width: '200px', height: 'auto' }}
           />

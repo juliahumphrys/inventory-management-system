@@ -7,13 +7,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json({ limit: '20mb' }));
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -226,8 +227,29 @@ app.post('/items/:id/historical', (req, res) => {
   });
 });
 
+//search bar
+app.get('/items/search', (req, res) => {
+  const { itemNumber } = req.query;
+    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+  if (!itemNumber) {
+    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
+  }
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+  db.get(sql, [itemNumber], (err, row) => {
+    if (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ success: false, message: "No item found with that item number" });
+    }
+    res.json({ success: true, data: row });
+  });
+});
+
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+ 
