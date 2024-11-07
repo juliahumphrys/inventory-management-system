@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './NavBar.css';
 import { Link } from 'react-router-dom';
 
+
 function NavBar() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]); // Holds search results
@@ -12,6 +13,8 @@ function NavBar() {
 const handleEditChange = (e) => {
   const { name, value } = e.target;
   setEditingItem((prev) => ({ ...prev, [name]: value }));
+
+  
 };
 
 const submitEdit = async () => {
@@ -82,23 +85,28 @@ const submitEdit = async () => {
       <div className="search-results">
      <h4>Search Results:</h4>
      <ul>
-      { results.map((itemInfo, index) => (
-        <li key={index}>
-          <strong>Item Name:</strong> {itemInfo.itemName} <br />
-          <strong>Description:</strong> {itemInfo.itemDescription} <br />
-          <strong>Category:</strong> {itemInfo.itemCategory} <br />
-          <strong>Quantity:</strong> {itemInfo.itemQuantity} <br />
-          <strong>Location:</strong> {itemInfo.itemLocation} <br />
-          <button onClick={() => setEditingItem(itemInfo)}>Edit Item</button>
-        </li>
-      ))}
+     {results.map((itemInfo, index) => (
+  <li key={index}>
+    <strong>Item Name:</strong> {itemInfo.itemName} <br />
+    <strong>Description:</strong> {itemInfo.itemDescription} <br />
+    <strong>Category:</strong> {itemInfo.itemCategory} <br />
+    <strong>Quantity:</strong> {itemInfo.itemQuantity} <br />
+    <strong>Location:</strong> {itemInfo.itemLocation} <br />
+    <div className="edit-item-button-box">
+      <button className="edit-item-button" onClick={() => setEditingItem(itemInfo)}>
+        Edit Item
+      </button>
+    </div>
+  </li>
+))}
+
     </ul>
   </div>
 )}
 {editingItem && (
-  <div className="edit-form">
+  <div className="edit-form-container">
     <h4>Edit Item</h4>
-    <form onSubmit={(e) => { e.preventDefault(); submitEdit(); }}>
+    <form className="edit-form" onSubmit={(e) => { e.preventDefault(); submitEdit(); }}>
       <label>
         Item Name:
         <input
