@@ -13,7 +13,6 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -227,35 +226,10 @@ app.post('/items/:id/historical', (req, res) => {
   });
 });
 
-app.post('/AdminLogin', (req, res) => {
-  const { username, password } = req.body;
-  console.log(req.body.username);
-  console.log(req.body.password);
-
-  // Validate input
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
-  }
-
-  // Query to find the user
-  const sql = 'SELECT * FROM adminAccounts WHERE username = ? AND password = ?';
-  db.get(sql, [username, password], (err, row) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
-    if (!row) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-    // Successful login
-    res.json({ 
-      message: 'Login successful!', 
-      user: { username: row.username } 
-    });
-  });
-});
-
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+ 
