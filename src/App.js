@@ -5,8 +5,12 @@ import NavBar from './Components/NavBar';
 import Home from './Components/Home';
 import Inventory from './Components/Inventory';
 import Developers from './Components/Developers';
-import './App.css';
+import AdminLogin from './Components/AdminLogin';
 import AdminPage from './Components/AdminPage';
+import Administrators from './Components/AdminPage';
+import Reports from './Components/Reports';
+import './App.css';
+
 
 function App() {
   return (
@@ -20,7 +24,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/Developers" element={<Developers />} />
-          <Route path="/Administrators" element={<AdminPage />} />
+          <Route path="/login" element={<AdminLogin />} />
+          <Route path="/AdminPage" element={<AdminPage />} />
+          <Route path="/Administrators" element={<Administrators />} />
+          <Route path="/Reports" element={<Reports />} />
         </Routes>
       </div>
     </Router>

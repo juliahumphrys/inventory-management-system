@@ -7,12 +7,13 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json({ limit: '20mb' }));
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -93,6 +94,7 @@ db.serialize(() => {
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL
   )`);
+  
 });
 
 // Routes 
@@ -222,6 +224,33 @@ app.post('/items/:id/historical', (req, res) => {
       return res.status(400).json({ error: err.message });
     }
     res.json({ message: 'Historical item info added successfully', id: this.lastID });
+  });
+});
+
+app.post('/AdminLogin', (req, res) => {
+  const { username, password } = req.body;
+  console.log(req.body.username);
+  console.log(req.body.password);
+
+  // Validate input
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
+  }
+
+  // Query to find the user
+  const sql = 'SELECT * FROM adminAccounts WHERE username = ? AND password = ?';
+  db.get(sql, [username, password], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    // Successful login
+    res.json({ 
+      message: 'Login successful!', 
+      user: { username: row.username } 
+    });
   });
 });
 
