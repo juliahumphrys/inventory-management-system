@@ -229,6 +229,7 @@ function Inventory() {
             required
           >
             <option value="" disabled>Select Item Location</option>
+            <option value="In Use for Show">In Use for Show</option>
             <option value="Greenroom, Prop Bin 1">Greenroom, Prop Bin 1</option>
             <option value="Greenroom, Prop Bin 2">Greenroom, Prop Bin 2</option>
             <option value="Greenroom, Prop Bin 3">Greenroom, Prop Bin 3</option>

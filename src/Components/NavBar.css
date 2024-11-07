@@ -73,8 +73,49 @@
     cursor: pointer;
     border-radius: 5px;
   }
+  .search-results {
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .search-results h4 {
+    margin-top: 0;
+    font-weight: bold;
+  }
+  
+  .search-results li {
+    margin-bottom: 1em;
+  }
+  
+  .search-results li strong {
+    color: #333;
+  }
   
   .navbar-search-button:hover {
     background-color: #777;
+  }
+  .edit-form {
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+  }
+  
+  .edit-form h4 {
+    margin-top: 0;
+  }
+  
+  .edit-form label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+  
+  .edit-form input {
+    display: block;
+    margin-top: 0.2em;
+    padding: 0.3em;
+    width: 100%;
   }
   
