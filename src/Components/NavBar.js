@@ -53,15 +53,21 @@ function NavBar() {
       {/* Search Results - Outside of Navigation Bar */}
       {error && <p className="error-message">{error}</p>}
       {results.length > 0 && (
-        <div className="search-results">
-          <h4>Search Results:</h4>
-          <ul>
-            {results.map((itemInfo, index) => (
-              <li key={index}>{itemInfo.itemName}</li> // Display item name
-            ))}
-          </ul>
-        </div>
-      )}
+  <div className="search-results">
+    <h4>Search Results:</h4>
+    <ul>
+      {results.map((itemInfo, index) => (
+        <li key={index}>
+          <strong>Item Name:</strong> {itemInfo.itemName} <br />
+          <strong>Description:</strong> {itemInfo.itemDescription} <br />
+          <strong>Category:</strong> {itemInfo.itemCategory} <br />
+          <strong>Quantity:</strong> {itemInfo.itemQuantity} <br />
+          <strong>Location:</strong> {itemInfo.itemLocation}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
     </>
   );
 }
