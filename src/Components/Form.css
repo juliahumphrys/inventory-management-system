@@ -1,6 +1,4 @@
-/* Form.css */
-/* General form styling - Apply only to the form container (not the search bar) */
-form {
+.form-container form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -13,13 +11,12 @@ form {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Individual inputs - Ensure inputs are styled inside forms */
-form input[type="text"],
-form input[type="number"],
-form input[type="file"],
-form input[type="date"],
-form select,
-form textarea {
+.form-container form input[type="text"],
+.form-container form input[type="number"],
+.form-container form input[type="file"],
+.form-container form input[type="date"],
+.form-container form select,
+.form-container form textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -29,19 +26,18 @@ form textarea {
     box-sizing: border-box;
 }
 
-/* Focused inputs */
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="file"]:focus,
-input[type="date"]:focus,
-select:focus,
-textarea:focus {
+.form-container form input[type="text"]:focus,
+.form-container form input[type="number"]:focus,
+.form-container form input[type="file"]:focus,
+.form-container form input[type="date"]:focus,
+.form-container form select:focus,
+.form-container form textarea:focus {
     border-color: #007bff;
     outline: none;
 }
 
-/* Styling for buttons */
-button {
+/* Button styling within the form */
+.form-container form button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -50,25 +46,23 @@ button {
     transition: background-color 0.3s;
     border-radius: 4px;
     border: none;
-    align-self: flex-start; /* Prevents button from expanding */
+    align-self: flex-start; 
 }
 
-/* Button hover and active states */
-button:hover {
+.form-container form button:hover {
     background-color: #45a049;
 }
 
-button:active {
+.form-container form button:active {
     background-color: #3e8e41;
 }
 
-/* Headings and Image Styling */
-h5 {
+.form-container form h5 {
     margin-bottom: 20px;
     color: #333;
 }
 
-img {
+.form-container form img {
     max-width: 200px;
     max-height: 200px;
     margin-top: 10px;
