@@ -46,7 +46,6 @@ function NavBar() {
         </button>
       </form>
       
-      
       {error && <p className="error-message">{error}</p>}
       {results.length > 0 && (
         <div className="search-results">

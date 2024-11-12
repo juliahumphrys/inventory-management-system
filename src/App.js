@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="app-header">
-          <h1>ACT Inventory</h1>
+          <h1>MyTrackIMS</h1>
         </header>
         <NavBar />
         <Routes>
