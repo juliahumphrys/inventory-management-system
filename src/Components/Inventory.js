@@ -6,7 +6,7 @@ function Inventory() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemImage: null, });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
-  const [historicalItemInfo, setHistoricalItemInfo] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
+  const [newHistoricalItem, setHistoricalItem] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -51,6 +51,7 @@ function Inventory() {
   const validateForm = () => {
     const { itemNumber, itemName, itemCategory, itemQuantity, itemLocation } = newItem;
     const { itemCost, itemCondition, itemDescription } = newAdvancedItem;
+    const { dateLastUsed, showLastUsed } = newHistoricalItem;
 
     // Check regular form fields
     if (!itemNumber || !itemName || !itemCategory || !itemQuantity || !itemLocation) {
@@ -83,7 +84,11 @@ function Inventory() {
         await handleUpdateItem(currentItem.itemNumber, newItem);
         setEditMode(false);
       } else {
-        await axios.post('/items', { ...newItem, ...newAdvancedItem });
+        await axios.post('/items', { ...newItem });
+        await axios.post(`/items/${newItem.itemNumber}/advanced`, { ...newAdvancedItem });
+        await axios.post(`/items/${newItem.itemNumber}/historical`, { ...newHistoricalItem });
+
+
       }
       fetchItems();
       resetForm();
@@ -151,7 +156,7 @@ function Inventory() {
 
   const handleHistoricalInputChange = (e) => {
     const { name, value } = e.target;
-    setHistoricalItemInfo({ ...historicalItemInfo, [name]: value });
+    setHistoricalItem({ ...newHistoricalItem, [name]: value });
   };
 
   return (
@@ -230,6 +235,7 @@ function Inventory() {
             required
           >
             <option value="" disabled>Select Item Location</option>
+            <option value="In Use for Show">In Use for Show</option>
             <option value="Greenroom, Prop Bin 1">Greenroom, Prop Bin 1</option>
             <option value="Greenroom, Prop Bin 2">Greenroom, Prop Bin 2</option>
             <option value="Greenroom, Prop Bin 3">Greenroom, Prop Bin 3</option>
@@ -292,8 +298,8 @@ function Inventory() {
 
 
           {/* Historical Item Info Form */}
-            <input type="date" name="dateLastUsed" value={historicalItemInfo.dateLastUsed} onChange={handleHistoricalInputChange} />
-            <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={historicalItemInfo.showLastUsed} onChange={(e) => setHistoricalItemInfo({ ...historicalItemInfo, showLastUsed: e.target.value })} />
+            <input type="date" name="dateLastUsed" value={newHistoricalItem.dateLastUsed} onChange={handleHistoricalInputChange} />
+            <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={newHistoricalItem.showLastUsed} onChange={(e) => setHistoricalItem({ ...newHistoricalItem, showLastUsed: e.target.value })} />
 
           {/* Theater Status Form */}
           <p>Is the item rented out to another location?</p>
@@ -327,9 +333,9 @@ function Inventory() {
         <p>Quantity: {item.itemQuantity}</p>
         <p>Location: {item.itemLocation}</p>
         
-        {item.itemImage && (
+        {item.itemPicture && (
           <img
-            src={`http://localhost:5000/${item.itemImage}`} // Adjust this URL if your backend server or image path is different
+            src={`http://localhost:3000/${item.itemPicture}`} // Adjust this URL if your backend server or image path is different 
             alt={item.itemName}
             style={{ width: '200px', height: 'auto' }}
           />
