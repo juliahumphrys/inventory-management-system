@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Form.css';
 
 function Inventory() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ itemNumber: '', itemName: '', itemCategory: '', itemQuantity: '', itemLocation: '', itemImage: null, });
   const [newAdvancedItem, setNewAdvancedItem] = useState({ itemNumber: '', itemCost: '', itemCondition: '', itemDescription: '' });
-<<<<<<< Updated upstream
   const [newHistoricalItem, setHistoricalItem] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });
   const [error, setError] = useState('');
-=======
-  const [newHistoricalItem, setHistoricalItem] = useState({ itemNumber: '', dateLastUsed: '', showLastUsed: '' });  const [error, setError] = useState('');
->>>>>>> Stashed changes
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false); // Control form visibility
@@ -90,11 +87,8 @@ function Inventory() {
         await axios.post('/items', { ...newItem });
         await axios.post(`/items/${newItem.itemNumber}/advanced`, { ...newAdvancedItem });
         await axios.post(`/items/${newItem.itemNumber}/historical`, { ...newHistoricalItem });
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
       }
       fetchItems();
       resetForm();
@@ -162,12 +156,8 @@ function Inventory() {
 
   const handleHistoricalInputChange = (e) => {
     const { name, value } = e.target;
-<<<<<<< Updated upstream
     setHistoricalItem({ ...newHistoricalItem, [name]: value });
   };
-=======
-    setHistoricalItem({ ...newHistoricalItem, [name]: value });  };
->>>>>>> Stashed changes
 
   return (
     <div>
@@ -308,14 +298,8 @@ function Inventory() {
 
 
           {/* Historical Item Info Form */}
-<<<<<<< Updated upstream
             <input type="date" name="dateLastUsed" value={newHistoricalItem.dateLastUsed} onChange={handleHistoricalInputChange} />
             <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={newHistoricalItem.showLastUsed} onChange={(e) => setHistoricalItem({ ...newHistoricalItem, showLastUsed: e.target.value })} />
-=======
-          <input type="date" name="dateLastUsed" value={newHistoricalItem.dateLastUsed} onChange={handleHistoricalInputChange} />
-            <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={newHistoricalItem.showLastUsed} onChange={(e) => setHistoricalItem({ ...newHistoricalItem, showLastUsed: e.target.value })} />
-
->>>>>>> Stashed changes
 
           {/* Theater Status Form */}
           <p>Is the item rented out to another location?</p>

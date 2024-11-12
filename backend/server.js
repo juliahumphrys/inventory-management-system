@@ -146,10 +146,6 @@ app.put('/items/:itemNumber', (req, res) => {
 app.delete('/items/:itemNumber', (req, res) => {
   const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
   const params = [req.params.itemNumber];
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
   db.run(sql, params, (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
@@ -191,12 +187,7 @@ app.put('/items/:itemNumber/advanced', (req, res) => {
   const sql = `UPDATE advancedItemInfo
                SET itemCost = ?, itemCondition = ?, itemDescription = ?
                WHERE itemNumber = ?`;
-<<<<<<< Updated upstream
   const params = [itemCost, itemCondition, itemDescription, req.params.itemNumber];
-=======
-               const params = [itemCost, itemCondition, itemDescription, req.params.itemNumber];
-
->>>>>>> Stashed changes
 
   db.run(sql, params, (err) => {
     if (err) {

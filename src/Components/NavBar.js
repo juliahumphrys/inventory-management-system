@@ -7,8 +7,6 @@ function NavBar() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]); // Holds search results
   const [error, setError] = useState(null); // Handles error messages
-<<<<<<< Updated upstream
-
   const [editingItem, setEditingItem] = useState(null); // Track the item being edited
 
 const handleEditChange = (e) => {
@@ -36,43 +34,12 @@ const submitEdit = async () => {
     alert("Could not update item");
   }
 };
-=======
-  const [editingItem, setEditingItem] = useState(null); // Track the item being edited
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditingItem((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const submitEdit = async () => {
-    try {
-      const response = await fetch(`/items/${editingItem.itemNumber}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingItem),
-      });
-
-      if (!response.ok) throw new Error('Failed to update item');
-      const result = await response.json();
-      alert(result.message);
-      setEditingItem(null); // Close edit form after successful update
-      handleSearch(); // Refresh the search results
-    } catch (error) {
-      console.error("Error updating item:", error);
-      alert("Could not update item");
-    }
-  };
->>>>>>> Stashed changes
 
   const handleSearch = async (event) => {
     event.preventDefault();
     if (query) {
       try {
-<<<<<<< Updated upstream
         const response = await fetch(`/items/search?itemNumber=${encodeURIComponent(query)}`);
-=======
-        const response = await fetch(`http://localhost:3000/items/search?itemNumber=${encodeURIComponent(query)}`);
->>>>>>> Stashed changes
         const result = await response.json();
         
         setResults(result.data ? [result.data] : []); // Adjust as per result structure
@@ -114,7 +81,6 @@ const submitEdit = async () => {
       {/* Search Results - Outside of Navigation Bar */}
       {error && <p className="error-message">{error}</p>}
       {results.length > 0 && (
-<<<<<<< Updated upstream
       <div className="search-results">
      <h4>Search Results:</h4>
      <ul>
@@ -241,102 +207,6 @@ const submitEdit = async () => {
   </div>
 )}
 
-=======
-        <ul>
-          {results.map((itemInfo, index) => (
-            <li key={index}>
-              <strong>Item Name:</strong> {itemInfo.itemName} <br />
-              <strong>Description:</strong> {itemInfo.itemDescription} <br />
-              <strong>Category:</strong> {itemInfo.itemCategory} <br />
-              <strong>Quantity:</strong> {itemInfo.itemQuantity} <br />
-              <strong>Location:</strong> {itemInfo.itemLocation} <br />
-              <div className="edit-item-button-box">
-                <button className="edit-item-button" onClick={() => setEditingItem(itemInfo)}>
-                  Edit Item
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {editingItem && (
-        <div className="edit-form-container">
-          <h4>Edit Item</h4>
-          <form className="edit-form" onSubmit={(e) => { e.preventDefault(); submitEdit(); }}>
-            <label>
-              Item Name:
-              <input
-                type="text"
-                name="itemName"
-                value={editingItem.itemName}
-                onChange={handleEditChange}
-              />
-            </label>
-            <label>
-              Description:
-              <input
-                type="text"
-                name="itemDescription"
-                value={editingItem.itemDescription}
-                onChange={handleEditChange}
-              />
-            </label>
-            <label>
-              Item Category:
-              <select
-                name="itemCategory"
-                value={editingItem.itemCategory}
-                onChange={handleEditChange}
-              >
-                <option value="" disabled>Select Item Category</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Animals">Animals</option>
-                <option value="Documents and Money">Documents and Money</option>
-                <option value="Food">Food</option>
-                <option value="Games">Games</option>
-                <option value="Religion">Religion</option>
-                <option value="Hand Props">Hand Props</option>
-                <option value="Liquor Bottles">Liquor Bottles</option>
-                <option value="Medical Instruments">Medical Instruments</option>
-                <option value="Kitchen Items">Kitchen Items</option>
-                <option value="Musical Instruments">Musical Instruments</option>
-                <option value="Holiday">Holiday</option>
-                <option value="Miscellaneous">Miscellaneous</option>
-                <option value="Foam">Lighting</option>
-              </select>
-            </label>
-            <label>
-              Location:
-              <select
-                name="itemLocation"
-                value={editingItem.itemLocation}
-                onChange={handleEditChange}
-              >
-                <option value="" disabled>Select Item Location</option>
-                <option value="In Use for Show">In Use for Show</option>
-                <option value="Greenroom, Prop Bin 1">Greenroom, Prop Bin 1</option>
-                <option value="Greenroom, Prop Bin 2">Greenroom, Prop Bin 2</option>
-                <option value="Greenroom, Prop Bin 3">Greenroom, Prop Bin 3</option>
-                <option value="Greenroom, Prop Bin 4">Greenroom, Prop Bin 4</option>
-                {/* Add the rest of your locations */}
-              </select>
-            </label>
-            <label>
-              Quantity:
-              <input
-                type="number"
-                name="itemQuantity"
-                value={editingItem.itemQuantity}
-                onChange={handleEditChange}
-              />
-            </label>
-            <button type="submit">Save Changes</button>
-            <button type="button" onClick={() => setEditingItem(null)}>Cancel</button>
-          </form>
-        </div>
-      )}
->>>>>>> Stashed changes
     </>
   );
 }
