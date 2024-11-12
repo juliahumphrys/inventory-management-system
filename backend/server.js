@@ -13,8 +13,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json());
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -127,12 +126,12 @@ app.post('/items', (req, res) => {
 });
 
 // Update an item
-app.put('/items/:itemNumber', (req, res) => {
+app.put('/items/:id', (req, res) => {
   const { itemName, itemCategory, itemQuantity, itemLocation } = req.body;
   const sql = `UPDATE itemInfo
                SET itemName = ?, itemCategory = ?, itemQuantity = ?, itemLocation = ?
                WHERE itemNumber = ?`;
-  const params = [itemName, itemCategory, itemQuantity, itemLocation, req.params.itemNumber];
+  const params = [itemName, itemCategory, itemQuantity, itemLocation, req.params.id];
 
   db.run(sql, params, (err) => {
     if (err) {
@@ -143,9 +142,10 @@ app.put('/items/:itemNumber', (req, res) => {
 });
 
 // Delete an item
-app.delete('/items/:itemNumber', (req, res) => {
+app.delete('/items/:id', (req, res) => {
   const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
-  const params = [req.params.itemNumber];
+  const params = [req.params.id];
+
   db.run(sql, params, (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
@@ -155,9 +155,9 @@ app.delete('/items/:itemNumber', (req, res) => {
 });
 
 // Fetch advanced item info
-app.get('/items/:itemNumber/advanced', (req, res) => {
+app.get('/items/:id/advanced', (req, res) => {
   const sql = 'SELECT * FROM advancedItemInfo WHERE itemNumber = ?';
-  db.get(sql, [req.params.itemNumber], (err, row) => {
+  db.get(sql, [req.params.id], (err, row) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
@@ -166,10 +166,10 @@ app.get('/items/:itemNumber/advanced', (req, res) => {
 });
 
 // Add advanced item info
-app.post('/items/:itemNumber/advanced', (req, res) => {
+app.post('/items/:id/advanced', (req, res) => {
   const { itemCost, itemCondition, itemDescription } = req.body;
   const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
-  const params = [req.params.itemNumber, itemCost, itemCondition, itemDescription];
+  const params = [req.params.id, itemCost, itemCondition, itemDescription];
 
   console.log("Adding advanced item info:", params); // Log the advanced item info being added
 
@@ -182,12 +182,12 @@ app.post('/items/:itemNumber/advanced', (req, res) => {
 });
 
 // Update advanced item info
-app.put('/items/:itemNumber/advanced', (req, res) => {
+app.put('/items/:id/advanced', (req, res) => {
   const { itemCost, itemCondition, itemDescription } = req.body;
   const sql = `UPDATE advancedItemInfo
                SET itemCost = ?, itemCondition = ?, itemDescription = ?
                WHERE itemNumber = ?`;
-  const params = [itemCost, itemCondition, itemDescription, req.params.itemNumber];
+  const params = [itemCost, itemCondition, itemDescription, req.params.id];
 
   db.run(sql, params, (err) => {
     if (err) {
@@ -198,9 +198,9 @@ app.put('/items/:itemNumber/advanced', (req, res) => {
 });
 
 // Delete advanced item info
-app.delete('/items/:itemNumber/advanced', (req, res) => {
+app.delete('/items/:id/advanced', (req, res) => {
   const sql = 'DELETE FROM advancedItemInfo WHERE itemNumber = ?';
-  const params = [req.params.itemNumber];
+  const params = [req.params.id];
 
   db.run(sql, params, (err) => {
     if (err) {
@@ -211,10 +211,10 @@ app.delete('/items/:itemNumber/advanced', (req, res) => {
 });
 
 // Add historical item info
-app.post('/items/:itemNumber/historical', (req, res) => {
+app.post('/items/:id/historical', (req, res) => {
   const { dateLastUsed, showLastUsed } = req.body;
   const sql = 'INSERT INTO historicalItemInfo (itemNumber, dateLastUsed, showLastUsed) VALUES (?, ?, ?)';
-  const params = [req.params.itemNumber, dateLastUsed, showLastUsed];
+  const params = [req.params.id, dateLastUsed, showLastUsed];
 
   console.log("Adding historical item info:", params); // Log the historical item info being added
 
@@ -226,29 +226,8 @@ app.post('/items/:itemNumber/historical', (req, res) => {
   });
 });
 
-//search bar
-app.get('/items/search', (req, res) => {
-  const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
-  if (!itemNumber) {
-    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
-  }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  db.get(sql, [itemNumber], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
-    }
-    res.json({ success: true, data: row });
-  });
-});
-
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
- 
