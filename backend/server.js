@@ -146,6 +146,10 @@ app.put('/items/:itemNumber', (req, res) => {
 app.delete('/items/:itemNumber', (req, res) => {
   const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
   const params = [req.params.itemNumber];
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   db.run(sql, params, (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
@@ -187,7 +191,12 @@ app.put('/items/:itemNumber/advanced', (req, res) => {
   const sql = `UPDATE advancedItemInfo
                SET itemCost = ?, itemCondition = ?, itemDescription = ?
                WHERE itemNumber = ?`;
+<<<<<<< Updated upstream
   const params = [itemCost, itemCondition, itemDescription, req.params.itemNumber];
+=======
+               const params = [itemCost, itemCondition, itemDescription, req.params.itemNumber];
+
+>>>>>>> Stashed changes
 
   db.run(sql, params, (err) => {
     if (err) {
@@ -225,6 +234,26 @@ app.post('/items/:itemNumber/historical', (req, res) => {
     res.json({ message: 'Historical item info added successfully', id: this.lastID });
   });
 });
+
+//search bar
+app.get('/items/search', (req, res) => {
+  const { itemNumber } = req.query;
+    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+  if (!itemNumber) {
+    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
+  }
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+  db.get(sql, [itemNumber], (err, row) => {
+    if (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ success: false, message: "No item found with that item number" });
+    }
+    res.json({ success: true, data: row });
+  });
+});
+
 
 //search bar
 app.get('/items/search', (req, res) => {
