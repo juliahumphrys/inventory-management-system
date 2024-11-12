@@ -5,8 +5,9 @@ const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
+app.use(cors({ origin: 'http://localhost:3002' }));  // Adjust if your frontend port differs
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
