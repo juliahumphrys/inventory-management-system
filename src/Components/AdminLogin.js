@@ -6,8 +6,8 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
-  const [loginMessage, setLoginMessage] = useState('');
   const navigate = useNavigate();
+  
 
   const handleLogin = (e) => {
     const { name, value } = e.target;
@@ -32,7 +32,8 @@ const AdminLogin = () => {
       console.log(result);
 
       if (result.message === 'Login successful!') {
-        navigate('/Reports');
+        console.log('Redirecting to admin page...');
+        navigate('/adminpage');
       } else {
         setError('Invalid username or password');
       }
@@ -42,10 +43,11 @@ const AdminLogin = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div>
+      <h1>Administrator Login</h1>
+      <p>Please login with an administrator account to access the administrator page.</p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -63,7 +65,7 @@ const AdminLogin = () => {
           onChange={handleLogin}
           required
           autoComplete="current-password"
-        />  
+        />
         <button type="submit" disabled={loading}>
           {loading ? 'Submitting...' : 'Submit'}
         </button>

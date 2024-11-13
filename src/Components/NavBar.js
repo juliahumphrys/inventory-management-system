@@ -32,7 +32,7 @@ function NavBar() {
           <li><Link to="/inventory">Inventory</Link></li>
           <li><Link to="/reports">Reports</Link></li>
           <li><Link to="/developers">Developers Page</Link></li>
-          <li><Link to="/administrators">Administrators</Link></li>
+          <li><Link to="/login">Administrators</Link></li>
         </ul>
         
         {/* Search Bar in the Navigation Bar */}
