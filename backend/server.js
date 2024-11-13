@@ -226,6 +226,30 @@ app.post('/items/:itemNumber/historical', (req, res) => {
   });
 });
 
+app.post('/AdminLogin', (req, res) => {
+  console.log('Received POST request to /AdminLogin');
+  console.log('Request body:', req.body);
+  const { username, password } = req.body;
+
+  //Validate input
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
+  }
+
+  //Query to find the user
+  const sql = 'SELECT * FROM adminAccounts WHERE username = ? AND password = ?';
+  db.get(sql, [username, password], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    // Successful login
+    res.json({ message: 'Login successful!', user: { username: row.username } });
+  });
+});  
+
 //search bar
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
