@@ -75,31 +75,35 @@ const SearchResults = () => {
             <li key={index} className="result-item">
               {editingItem && editingItem.itemNumber === item.itemNumber ? (
                 <div className="edit-form">
-                  
+                  <strong>Item Name:</strong>
                   <input
                     type="text"
                     name="itemName"
                     value={editingItem.itemName}
                     onChange={handleEditChange}
                   />
+                  <strong>Item Description:</strong>
                   <input
                     type="text"
                     name="itemDescription"
                     value={editingItem.itemDescription}
                     onChange={handleEditChange}
                   />
+                  <strong>Item Category:</strong>
                   <input
                     type="text"
                     name="itemCategory"
                     value={editingItem.itemCategory}
                     onChange={handleEditChange}
                   />
+                  <strong>Item Quantity:</strong>
                   <input
                     type="number"
                     name="itemQuantity"
                     value={editingItem.itemQuantity}
                     onChange={handleEditChange}
                   />
+                  <strong>Item Location:</strong>
                   <input
                     type="text"
                     name="itemLocation"
