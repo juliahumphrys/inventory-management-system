@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Form.css';
-import './NavBar.css';
 
 function Inventory() {
   const [items, setItems] = useState([]);
@@ -144,12 +143,11 @@ function Inventory() {
       </button>
 
       {showAddForm && (
-        <div className="form-container"> {/* Added wrapper with .form-container */}
+        <div className="form-container"> 
           <form>
             <h5>{editMode ? 'Edit Item' : 'Add a New Item'}</h5>
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            {/* Basic Item Information */}
             <input type="text" placeholder="Item Number" value={newItem.itemNumber} onChange={(e) => setNewItem({ ...newItem, itemNumber: e.target.value })} required />
             <input type="text" placeholder="Item Name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} required />
             <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -159,29 +157,23 @@ function Inventory() {
 
             <select value={newItem.itemCategory} onChange={(e) => setNewItem({ ...newItem, itemCategory: e.target.value })} required>
               <option value="" disabled>Select Item Category</option>
-              {/* Categories */}
             </select>
 
             <select value={newItem.itemLocation} onChange={(e) => setNewItem({ ...newItem, itemLocation: e.target.value })} required>
               <option value="" disabled>Select Item Location</option>
-              {/* Locations */}
             </select>
 
             <input type="number" placeholder="Item Quantity" value={newItem.itemQuantity} onChange={(e) => setNewItem({ ...newItem, itemQuantity: e.target.value })} required />
 
-            {/* Advanced Item Info Form */}
             <input type="text" placeholder="Item Cost" value={newAdvancedItem.itemCost} onChange={handleCostInputChange} required />
             <select value={newAdvancedItem.itemCondition} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemCondition: e.target.value })} required>
               <option value="" disabled>Select Item Condition</option>
-              {/* Conditions */}
             </select>
             <textarea placeholder="Item Description" value={newAdvancedItem.itemDescription} onChange={(e) => setNewAdvancedItem({ ...newAdvancedItem, itemDescription: e.target.value })} required />
 
-            {/* Historical Item Info Form */}
             <input type="date" name="dateLastUsed" value={newHistoricalItem.dateLastUsed} onChange={handleHistoricalInputChange} />
             <input type="text" name="showLastUsed" placeholder="Enter Show Last Used" value={newHistoricalItem.showLastUsed} onChange={(e) => setHistoricalItem({ ...newHistoricalItem, showLastUsed: e.target.value })} />
 
-            {/* Theater Status Form */}
             <p>Is the item rented out to another location?</p>
             <select value={newItem.isRented} onChange={(e) => setNewItem({ ...newItem, isRented: e.target.value })}>
               <option value="" disabled>Is it rented?</option>

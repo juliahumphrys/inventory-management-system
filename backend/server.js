@@ -26,7 +26,7 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
     // Test the connection and create a test table
     db.serialize(() => {
       db.run(`CREATE TABLE IF NOT EXISTS testConnection (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL
       )`, (err) => {
         if (err) {
@@ -60,7 +60,7 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
 // Create tables if they don't exist 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS itemInfo (
-    itemNumber TEXT PRIMARY KEY,
+    itemNumber TEXT PRIMARY KEY AUTOINCREMENT,
     itemName TEXT NOT NULL,
     itemCategory TEXT NOT NULL,
     itemQuantity INTEGER NOT NULL,
