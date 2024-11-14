@@ -4,28 +4,20 @@ import { Link } from 'react-router-dom';
 
 function NavBar() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]); // Holds search results
-  const [error, setError] = useState(null); // Handles error messages
+  
+  function searchAndOpenNewPage(query) {
+    window.open(`/search-results.html?query=${encodeURIComponent(query)}`, '_blank');
+  }
 
   const handleSearch = async (event) => {
     event.preventDefault();
     if (query) {
-      try {
-        const response = await fetch(`/items/search?itemNumber=${encodeURIComponent(query)}`);
-        const result = await response.json();
-        
-        setResults(result.data ? [result.data] : []); // Adjust as per result structure
-        setError(null); // Clear any previous errors
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-        setError("Could not fetch search results"); // Set error message
-      }
+      searchAndOpenNewPage(query); 
     }
   };
 
   return (
     <>
-      {/* Navigation Bar */}
       <nav className="navbar">
         <ul className="navbar-list">
           <li><Link to="/">Home</Link></li>
@@ -35,7 +27,6 @@ function NavBar() {
           <li><Link to="/login">Administrators</Link></li>
         </ul>
         
-        {/* Search Bar in the Navigation Bar */}
         <form className="navbar-search" onSubmit={handleSearch}>
           <input
             type="text"
@@ -49,25 +40,6 @@ function NavBar() {
           </button>
         </form>
       </nav>
-      
-      {/* Search Results - Outside of Navigation Bar */}
-      {error && <p className="error-message">{error}</p>}
-      {results.length > 0 && (
-  <div className="search-results">
-    <h4>Search Results:</h4>
-    <ul>
-      {results.map((itemInfo, index) => (
-        <li key={index}>
-          <strong>Item Name:</strong> {itemInfo.itemName} <br />
-          <strong>Description:</strong> {itemInfo.itemDescription} <br />
-          <strong>Category:</strong> {itemInfo.itemCategory} <br />
-          <strong>Quantity:</strong> {itemInfo.itemQuantity} <br />
-          <strong>Location:</strong> {itemInfo.itemLocation}
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
     </>
   );
 }

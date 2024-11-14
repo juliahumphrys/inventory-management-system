@@ -36,7 +36,6 @@
     outline: none;
 }
 
-/* Button styling within the form */
 .form-container form button {
     background-color: #4CAF50;
     color: white;
@@ -46,7 +45,7 @@
     transition: background-color 0.3s;
     border-radius: 4px;
     border: none;
-    align-self: flex-start; 
+    align-self: flex-start;
 }
 
 .form-container form button:hover {
@@ -69,3 +68,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.form-container {
+    border: 2px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
