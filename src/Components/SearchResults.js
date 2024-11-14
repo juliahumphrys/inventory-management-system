@@ -66,7 +66,7 @@ const SearchResults = () => {
   return (
     <div className="search-results-container">
       <h1>Search Results</h1>
-      <p>Query: {query}</p>
+      <p>Item Number: {query}</p>
       {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
       {results.length > 0 ? (
