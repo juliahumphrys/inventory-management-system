@@ -122,7 +122,7 @@ app.post('/items', (req, res) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
-    res.json({ message: 'Item added successfully', id: this.lastID });
+    res.json({ message: 'Item added successfully'});
   });
 });
 
