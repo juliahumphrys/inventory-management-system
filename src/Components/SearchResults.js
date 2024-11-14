@@ -90,12 +90,28 @@ const SearchResults = () => {
                     onChange={handleEditChange}
                   />
                   <strong>Item Category:</strong>
-                  <input
-                    type="text"
+                  <select
                     name="itemCategory"
                     value={editingItem.itemCategory}
-                    onChange={handleEditChange}
-                  />
+                    onChange={handleEditChange}>
+                  <option value="" disabled>Select Item Category</option>
+                  <option value="Clothing">Clothing</option>
+                  <option value="Animals">Animals</option>
+                  <option value="Documents and Money">Documents and Money</option>
+                  <option value="Food">Food</option>
+                  <option value="Games">Games</option>
+                  <option value="Religion">Religion</option>
+                  <option value="Hand Props">Hand Props</option>
+                  <option value="Liquor Bottles">Liquor Bottles</option>
+                  <option value="Medical Instruments">Medical Instruments</option>
+                  <option value="Kitchen Items">Kitchen Items</option>
+                  <option value="Musical Instruments">Musical Instruments</option>
+                  <option value="Holiday">Holiday</option>
+                  <option value="Miscellaneous">Miscellaneous</option>
+                  <option value="Foam">Lighting</option>
+                </select>
+
+
                   <strong>Item Quantity:</strong>
                   <input
                     type="number"
