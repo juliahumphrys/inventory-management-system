@@ -102,4 +102,17 @@
   .edit-button:active {
     background-color: #3e8e41;
   }
-    
+
+  .edit-form input,
+.edit-form select {
+    display: block;
+    margin: 8px 0;
+    padding: 8px;
+    width: 100%; /* Ensures select dropdown matches input width */
+    box-sizing: border-box;
+}
+
+/* Optional: You can add a border-radius to the select for consistency */
+.edit-form select {
+    border-radius: 4px;
+}
