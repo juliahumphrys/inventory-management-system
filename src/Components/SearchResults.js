@@ -126,16 +126,79 @@ const SearchResults = () => {
                     value={editingItem.itemLocation}
                     onChange={handleEditChange}
                   />
+                  <strong>Item Condition:</strong>
+                  <select
+                    name="itemCondition"
+                    value={editingItem.itemCondition}
+                    onChange={handleEditChange}>
+                  <option value="" disabled>Selct Item Condition</option>
+                  <option value="New">New</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Used">Used</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Bad">Bad</option>
+                  <option value="Disposed">Disposed</option>
+                  </select>
+
+                  <strong>Date Last Used:</strong>
+                  <input
+                  type="date"
+                  name="dateLastUsed"
+                  value={editingItem.dateLastUsed}
+                  onChange={handleEditChange}
+                  />
+
+                  <strong>Show Last Used: </strong>
+                  <input
+                    name="showLastUsed"
+                    value={editingItem.showLastUsed}
+                    onChange={handleEditChange}
+                  />
+
+                  <strong>Rent Status: </strong>
+                  <select
+                    name="isRented"
+                    value={editingItem.isRented}
+                    onChange={handleEditChange}
+                    >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                  </select>
+
+                  {item.isRented === 'Yes' && (
+                      <>
+                  <strong>Theater Renting the Item:</strong>
+                  <input
+                    type="text"
+                    name="theaterName"
+                    value={editingItem.theaterName}
+                    onChange={handleEditChange}
+                  />
+                  </>)}
+
+
                   <button onClick={submitEdit} className="save-button">Save</button>
                   <button onClick={() => setEditingItem(null)} className="cancel-button">Cancel</button>
                 </div>
               ) : (
                 <div>
                   <strong>Item Name:</strong> {item.itemName} <br />
+                  <strong>Item Image:</strong> {item.itemImage} <br />
                   <strong>Description:</strong> {item.itemDescription} <br />
                   <strong>Category:</strong> {item.itemCategory} <br />
                   <strong>Quantity:</strong> {item.itemQuantity} <br />
                   <strong>Location:</strong> {item.itemLocation} <br />
+                  <strong>Item Condition: </strong> {item.itemCondition} <br />
+                  <strong>Date Last Used:</strong> {item.dateLastUsed} <br />
+                  <strong>Show Last Used: </strong> {item.showLastUsed} <br />
+                  <strong>Rent Status: </strong> {item.isRented} <br />
+                  {item.IsRented === 'Yes' && (
+                        <>
+                    <strong>Theater Name:</strong> {item.theaterName} <br /> </>
+                  )}
+
+
                   <button
                     className="edit-button"
                     onClick={() => handleEdit(item)}
