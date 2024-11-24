@@ -26,7 +26,7 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
     // Test the connection and create a test table
     db.serialize(() => {
       db.run(`CREATE TABLE IF NOT EXISTS testConnection (
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL
       )`, (err) => {
         if (err) {
@@ -60,7 +60,7 @@ const db = new sqlite3.Database('./act_inventory.db', (err) => {
 // Create tables if they don't exist 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS itemInfo (
-    itemNumber TEXT PRIMARY KEY AUTOINCREMENT,
+    itemNumber INTEGER PRIMARY KEY AUTOINCREMENT,
     itemName TEXT NOT NULL,
     itemCategory TEXT NOT NULL,
     itemQuantity INTEGER NOT NULL,
@@ -248,7 +248,21 @@ app.post('/AdminLogin', (req, res) => {
     // Successful login
     res.json({ message: 'Login successful!', user: { username: row.username } });
   });
-});  
+});
+
+app.post('/GeneralLogin', (req, res) => {
+  const { username, password } = req.body;
+  
+  const generalUsername = 'actVolunteer';
+  const generalPassword = 'actInvent0ry';
+
+  if (username === generalUsername && password === generalPassword) {
+    res.json({ message: 'General login successful!' });
+  } else {
+    res.status(401).json({ error: 'Invalid username or password' });
+  }
+});
+
 
 //search bar
 app.get('/items/search', (req, res) => {
