@@ -5,7 +5,8 @@ const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const port = 3002;
+
 
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 

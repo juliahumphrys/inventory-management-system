@@ -33,7 +33,7 @@ const AdminLogin = () => {
 
       if (result.message === 'Login successful!') {
         console.log('Redirecting to admin page...');
-        navigate('/adminpage');
+        navigate('/AdminPage');
       } else {
         setError('Invalid username or password');
       }
