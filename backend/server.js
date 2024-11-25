@@ -3,23 +3,46 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+const publicIP = process.env.PUBLIC_IP;
+const privateIP = process.env.PRIVATE_IP;
+const baseUrl = process.env.BASE_URL;
+const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
 
+console.log('Public IP:', process.env.PUBLIC_IP);
+console.log('Private IP:', process.env.PRIVATE_IP);
+
+// Middleware
+app.use(cors({
+  origin: ['https://actinventory.com', 'http://localhost:3000'], // Allow production and local domains
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // Allow cookies
+})); // Enables Cross-Origin Resource Sharing
+
+app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
-
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-// Middleware
-app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.protocol !== 'https') {
+      res.redirect(`https://${req.headers.host}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
 
 // Connect to the SQLite database 
-const db = new sqlite3.Database('./act_inventory.db', (err) => {
+const dbPath = process.env.DB_PATH || './act_inventory.db';
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Could not connect to the database', err);
   } else {
@@ -429,8 +452,5 @@ app.post('/admins', (req, res) => {
 
  // Start the server
  app.listen(port, () => {
-   console.log(`Server is running on port ${port}`);
- });
-
-
- 
+  console.log(`Server is running on ${baseDomain}:${port}`);
+});
