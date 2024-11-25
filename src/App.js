@@ -33,9 +33,10 @@ function App() {
           <Route path="/" element={<GeneralLogin />} />
           <Route path="/home" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/Reports" element={<Reports />} />
           <Route path="/Developers" element={<Developers />} />
-          <Route path="/login" element={<AdminLogin />} />
-          <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/AdminPage" element={<AdminPage />} />
         </Routes>
       </div>
     </Router>
