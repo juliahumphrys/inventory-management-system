@@ -1,65 +1,68 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const GeneralLogin = ({ setIsLoggedIn }) => {
-  const [data, setData] = useState({ username: '', password: '' });
+const GeneralLogin = () => {
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  // Handle changes in input fields
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    setCredentials({ ...credentials, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  // Handle form submission
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch('/GeneralLogin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      const result = await res.json();
+    setLoading(true);
 
-      console.log(result);
+    // Hardcoded username and password for general users
+    const correctUsername = 'actVolunteer';
+    const correctPassword = 'actInvent0ry';
 
-      if (result.message === 'General login successful!') {
-        setIsLoggedIn(true);
-        navigate('/home'); // Redirect to the main page
-      } else {
-        setError('Invalid username or password');
-      }
-    } catch (error) {
-      setError('Login failed, please try again');
+    if (credentials.username === correctUsername && credentials.password === correctPassword) {
+      navigate('/home');  // Redirect to the main site after successful login
+    } else {
+      setError('Invalid username or password');
     }
+
+    setLoading(false);
   };
 
   return (
-    <div>
-        <h1>Volunteer Login</h1>
-        <p>Please login with the universal login. If you do not know it, ask an administrator.</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={data.username}
-          onChange={handleLogin}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={data.password}
-          onChange={handleLogin}
-          required
-        />
-        <button type="submit">Login</button>
+    <div className="general-login-container">
+      <h1>General Login</h1>
+      <form onSubmit={handleSubmit} className="general-login-form">
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            value={credentials.username}
+            onChange={handleChange}
+            placeholder="Enter your username"
+            required
+          />
+</div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button type="submit" disabled={loading} className="login-button">
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
-      {error && <div>{error}</div>}
+
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

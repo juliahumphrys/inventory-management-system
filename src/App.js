@@ -26,24 +26,15 @@ function App() {
     <Router>
       <div className="App">
         <header className="app-header">
-          <h1>ACT Inventory</h1>
+          <h1>MyTrackIMS</h1>
         </header>
-        {isLoggedIn && <NavBar />}
-        
+        <NavBar />
         <Routes>
-          <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          {isLoggedIn ? (
-            <>
-              <Route path="/home" element={<Home />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/Developers" element={<Developers />} />
-              <Route path="/Search-Results.html" element={<SearchResults />} />
-            </>
-          ) : (
-            <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          )}
+          <Route path="/" element={<GeneralLogin />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/Developers" element={<Developers />} />
           <Route path="/login" element={<AdminLogin />} />
-          <Route path="/Reports" element={<Reports />} />
           <Route path="/adminpage" element={<AdminPage />} />
         </Routes>
       </div>
