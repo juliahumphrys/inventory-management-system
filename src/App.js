@@ -6,6 +6,7 @@ import Home from './Components/Home';
 import Inventory from './Components/Inventory';
 import Developers from './Components/Developers';
 import './App.css';
+import Reports from './Components/Reports';
 import AdminPage from './Components/AdminPage';
 import AdminLogin from './Components/AdminLogin';
 import SearchResults from './Components/SearchResults';
@@ -24,6 +25,7 @@ function App() {
           <Route path="/Developers" element={<Developers />} />
           <Route path="/Search-Results.html" element={<SearchResults />} />
           <Route path="/login" element={<AdminLogin />} />
+          <Route path="/Reports" element={<Reports />} />
           <Route path="/adminpage" element={<AdminPage />} />
         </Routes>
       </div>

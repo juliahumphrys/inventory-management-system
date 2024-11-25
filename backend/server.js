@@ -7,14 +7,16 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 // Middleware
 app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -109,6 +111,20 @@ app.get('/items', (req, res) => {
     res.json({ message: 'success', data: rows });
   });
 });
+
+const addAdminUser = (username, password) => {
+  db.run(
+      `INSERT INTO adminAccounts (username, password) VALUES (?, ?)`,
+      [username, password],
+      function (err) {
+          if (err) {
+              console.error('Error inserting admin user:', err.message);
+          } else {
+              console.log('Admin user added successfully with ID:', this.lastID);
+          }
+      }
+  );
+};
 
 // Add a new item
 app.post('/items', (req, res) => {
@@ -288,11 +304,119 @@ app.get('/items/search', (req, res) => {
     res.json({ success: true, data: row });
   });
 });
+// Endpoint to add a New Admin
+app.post('/admins', (req, res) => {
+  const { username, password } = req.body;
 
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  // Call the addAdminUser function
+  db.run(
+    `INSERT INTO adminAccounts (username, password) VALUES (?, ?)`,
+    [username, password],
+    function (err) {
+        if (err) {
+            console.error('Error adding admin:', err.message);
+            res.status(500).json({ message: 'Failed to add admin user' });
+        } else {
+            res.status(200).json({ message: 'Admin user added successfully', id: this.lastID });
+        }
+    }
+  );
 });
+
+
+
+// Endpoint to generate inventory report
+ app.post('/generate-inventory-report', async (req, res) => {
+ const { includeTheaterStatus, includeAdvancedInfo, includeHistoricalInfo } = req.body;
+
+   // Query data from itemInfo (base table)
+   const baseQuery = `SELECT * FROM itemInfo`;
+   db.all(baseQuery, [], (err, items) => {
+     if (err) {
+       console.error('Error querying itemInfo:', err);
+       return res.status(500).send('Error generating report');
+     }
+
+//     // Prepare report data
+     let reportData = items.map(item => ({
+       itemNumber: item.itemNumber,
+       itemName: item.itemName,
+       itemCategory: item.itemCategory,
+       itemQuantity: item.itemQuantity,
+       itemLocation: item.itemLocation,
+     }));
+
+//     // Include theaterStatus data if selected
+     if (includeTheaterStatus) {
+       const theaterQuery = `SELECT * FROM theaterStatus`;
+       db.all(theaterQuery, [], (err, theaterData) => {
+         if (err) console.error('Error querying theaterStatus:', err);
+         reportData = reportData.map(item => {
+           const theater = theaterData.find(t => t.itemNumber === item.itemNumber);
+           return {
+             ...item,
+             rentedOut: theater ? theater.rentedOut : null,
+             locationRented: theater ? theater.locationRented : null,
+          };
+         });
+       });
+     }
+
+//     // Include advancedItemInfo data if selected
+     if (includeAdvancedInfo) {
+       const advancedQuery = `SELECT * FROM advancedItemInfo`;
+       db.all(advancedQuery, [], (err, advancedData) => {
+         if (err) console.error('Error querying advancedItemInfo:', err);
+         reportData = reportData.map(item => {
+           const advanced = advancedData.find(a => a.itemNumber === item.itemNumber);
+           return {
+             ...item,
+             itemCost: advanced ? advanced.itemCost : null,
+             itemCondition: advanced ? advanced.itemCondition : null,
+             itemDescription: advanced ? advanced.itemDescription : null,
+           };
+         });
+       });
+     }
+
+     // Include historicalItemInfo data if selected
+     if (includeHistoricalInfo) {
+       const historicalQuery = `SELECT * FROM historicalItemInfo`;
+       db.all(historicalQuery, [], (err, historicalData) => {
+         if (err) console.error('Error querying historicalItemInfo:', err);
+         reportData = reportData.map(item => {
+           const historical = historicalData.find(h => h.itemNumber === item.itemNumber);
+           return {
+             ...item,
+             dateLastUsed: historical ? historical.dateLastUsed : null,
+             showLastUsed: historical ? historical.showLastUsed : null,
+           };
+         });
+       });
+     }
+
+     // Generate Excel file
+     const worksheet = XLSX.utils.json_to_sheet(reportData);
+     const workbook = XLSX.utils.book_new();
+     XLSX.utils.book_append_sheet(workbook, worksheet, 'Inventory Report');
+
+     // Write Excel file to buffer and send to client
+     const fileBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+     res.setHeader('Content-Disposition', 'attachment; filename="inventory_report.xlsx"');
+     res.setHeader('Content-Type', 'application/octet-stream');
+     res.send(fileBuffer);
+   });
+ });
+
+
+ // Start the server
+ app.listen(port, () => {
+   console.log(`Server is running on port ${port}`);
+ });
+
 
  
