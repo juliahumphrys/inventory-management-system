@@ -41,6 +41,7 @@ function App() {
           <Route path="/Developers" element={isLoggedIn ? <Developers /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/AdminPage" element={<AdminPage />} />
+          <Route path="search-results" element={<SearchResults />} />
         </Routes>
       </div>
     </Router>

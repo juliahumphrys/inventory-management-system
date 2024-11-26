@@ -6,7 +6,7 @@ function NavBar() {
   const [query, setQuery] = useState('');
   
   function searchAndOpenNewPage(query) {
-    window.open(`/search-results.html?query=${encodeURIComponent(query)}`, '_blank');
+    window.open(`/search-results?query=${encodeURIComponent(query)}`, '_blank');
   }
 
   const handleSearch = async (event) => {

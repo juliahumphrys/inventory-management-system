@@ -5,8 +5,12 @@ const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-app.use(bodyParser.json()); 
+// Initialize the app variable before using it
 const app = express();
+
+// Middleware
+app.use(bodyParser.json()); // Now it's correctly placed
+
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
 const privateIP = process.env.PRIVATE_IP;
@@ -15,6 +19,9 @@ const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
 
 console.log('Public IP:', process.env.PUBLIC_IP);
 console.log('Private IP:', process.env.PRIVATE_IP);
+
+// Additional code (like routes) goes below this point
+
 
 // Middleware
 app.use(cors({
@@ -305,13 +312,34 @@ app.post('/GeneralLogin', (req, res) => {
 
 
 //search bar
+// Search bar with data from multiple tables
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+  console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+
   if (!itemNumber) {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+
+  // Use LEFT JOIN to combine data from the three tables based on itemNumber
+  const sql = `
+    SELECT 
+      itemInfo.*,
+      advancedItemInfo.itemCost, 
+      advancedItemInfo.itemCondition, 
+      advancedItemInfo.itemDescription,
+      historicalItemInfo.dateLastUsed,
+      historicalItemInfo.showLastUsed
+    FROM 
+      itemInfo 
+    LEFT JOIN 
+      advancedItemInfo ON itemInfo.itemNumber = advancedItemInfo.itemNumber
+    LEFT JOIN 
+      historicalItemInfo ON itemInfo.itemNumber = historicalItemInfo.itemNumber
+    WHERE 
+      itemInfo.itemNumber = ?
+  `;
+
   db.get(sql, [itemNumber], (err, row) => {
     if (err) {
       return res.status(500).json({ success: false, error: err.message });
@@ -324,24 +352,6 @@ app.get('/items/search', (req, res) => {
 });
 
 
-//search bar
-app.get('/items/search', (req, res) => {
-  const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
-  if (!itemNumber) {
-    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
-  }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  db.get(sql, [itemNumber], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
-    }
-    res.json({ success: true, data: row });
-  });
-});
 // Endpoint to add a New Admin
 app.post('/admins', (req, res) => {
   const { username, password } = req.body;
