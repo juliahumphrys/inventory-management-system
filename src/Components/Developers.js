@@ -1,5 +1,5 @@
 import React from 'react';
-import './Developers.css'; // Import the CSS file
+import './Developers.css'; 
 
 function Developers() {
   return (

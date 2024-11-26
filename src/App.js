@@ -22,9 +22,16 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/Developers" element={<Developers />} />
+<<<<<<< Updated upstream
           <Route path="/Search-Results.html" element={<SearchResults />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route path="/adminpage" element={<AdminPage />} />
+=======
+          <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/AdminPage" element={<AdminPage />} />
+          <Route path="/search-results" element={<SearchResults />} /> 
+
+>>>>>>> Stashed changes
         </Routes>
       </div>
     </Router>

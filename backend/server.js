@@ -1,14 +1,39 @@
 const express = require('express');
+console.log('Server is running!');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 
 const app = express();
+<<<<<<< Updated upstream
 const port = 3000;
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+=======
+const port = process.env.PORT || 3001;
+const publicIP = process.env.PUBLIC_IP;
+const privateIP = process.env.PRIVATE_IP;
+const baseUrl = process.env.BASE_URL;
+const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
+
+console.log('Public IP:', process.env.PUBLIC_IP);
+console.log('Private IP:', process.env.PRIVATE_IP);
+
+// Middleware
+
+app.use(cors({
+  origin: ['https://actinventory.com', 'http://localhost:3000'], // Allow production and local domains
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // Allow cookies
+})); // Enables Cross-Origin Resource Sharing
+
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+>>>>>>> Stashed changes
 app.use('/uploads', express.static('uploads'));
 
 // Middleware
@@ -270,14 +295,34 @@ app.get('/items/search', (req, res) => {
 });
 
 
-//search bar
+// Search bar with data from multiple tables
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+  console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+
   if (!itemNumber) {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+
+  // Use LEFT JOIN to combine data from the three tables based on itemNumber
+  const sql = `
+    SELECT 
+      itemInfo.*,
+      advancedItemInfo.itemCost, 
+      advancedItemInfo.itemCondition, 
+      advancedItemInfo.itemDescription,
+      historicalItemInfo.dateLastUsed,
+      historicalItemInfo.showLastUsed
+    FROM 
+      itemInfo 
+    LEFT JOIN 
+      advancedItemInfo ON itemInfo.itemNumber = advancedItemInfo.itemNumber
+    LEFT JOIN 
+      historicalItemInfo ON itemInfo.itemNumber = historicalItemInfo.itemNumber
+    WHERE 
+      itemInfo.itemNumber = ?
+  `;
+
   db.get(sql, [itemNumber], (err, row) => {
     if (err) {
       return res.status(500).json({ success: false, error: err.message });
@@ -288,6 +333,20 @@ app.get('/items/search', (req, res) => {
     res.json({ success: true, data: row });
   });
 });
+<<<<<<< Updated upstream
+=======
+
+
+app.get('/test', (req, res) => {
+  console.log('Test route hit');
+  res.send('Server is working!');
+});
+
+
+// Endpoint to add a New Admin
+app.post('/admins', (req, res) => {
+  const { username, password } = req.body;
+>>>>>>> Stashed changes
 
 
 // Start the server
