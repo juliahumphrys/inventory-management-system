@@ -28,9 +28,11 @@ function App() {
         <header className="app-header">
           <h1>MyTrackIMS</h1>
         </header>
-        <NavBar />
+
+        {isLoggedIn && <NavBar />}
+
         <Routes>
-          <Route path="/" element={<GeneralLogin />} />
+          <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/home" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/Reports" element={<Reports />} />

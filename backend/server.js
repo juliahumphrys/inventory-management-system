@@ -5,6 +5,7 @@ const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
+app.use(bodyParser.json()); 
 const app = express();
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
