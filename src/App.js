@@ -33,10 +33,10 @@ function App() {
 
         <Routes>
           <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/Reports" element={<Reports />} />
-          <Route path="/Developers" element={<Developers />} />
+          <Route path="/home" element={isLoggedIn ? <Home /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/inventory" element={isLoggedIn ? <Inventory /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/Reports" element={isLoggedIn ? <Reports /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/Developers" element={isLoggedIn ? <Developers /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/AdminPage" element={<AdminPage />} />
         </Routes>
