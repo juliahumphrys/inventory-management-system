@@ -26,7 +26,9 @@ function App() {
     <Router>
       <div className="App">
         <header className="app-header">
+          
           <h1>MyTrackIMS</h1>
+          
         </header>
 
         {isLoggedIn && <NavBar />}

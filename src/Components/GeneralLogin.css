@@ -1,0 +1,77 @@
+/* general-login-container styling */
+.general-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f9; /* Light background color for the page */
+    padding: 20px;
+    flex-direction: column; /* Stack elements vertically */
+  }
+  
+  /* Styling the form container */
+  .general-login-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px; /* Max width for the form box */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow around the box */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Spacing between form elements */
+  }
+  
+  /* Style for the title */
+  .general-login-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px; /* Space between the title and form */
+  }
+  
+  /* Style for form labels */
+  .general-login-form label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Style for input fields */
+  .general-login-form input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+  }
+  
+  .general-login-form input:focus {
+    border-color: #007bff;
+  }
+  
+  /* Style for the login button */
+  .login-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #28a745; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Style for error message */
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
