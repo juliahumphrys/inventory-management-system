@@ -17,9 +17,10 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted!");
     setLoading(true);
     try {
-      const res = await fetch('/AdminLogin', {
+     const res = await fetch('/AdminLogin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

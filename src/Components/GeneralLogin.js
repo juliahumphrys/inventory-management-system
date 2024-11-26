@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const GeneralLogin = () => {
+const GeneralLogin = ({ setIsLoggedIn }) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,8 @@ const GeneralLogin = () => {
     const correctPassword = 'actInvent0ry';
 
     if (credentials.username === correctUsername && credentials.password === correctPassword) {
-      navigate('/home');  // Redirect to the main site after successful login
+        setIsLoggedIn(true);
+        navigate('/home');  // Redirect to the main site after successful login
     } else {
       setError('Invalid username or password');
     }
