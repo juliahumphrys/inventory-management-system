@@ -47,7 +47,7 @@ const GeneralLogin = ({ setIsLoggedIn }) => {
             placeholder="Enter your username"
             required
           />
-</div>
+        </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -65,6 +65,11 @@ const GeneralLogin = ({ setIsLoggedIn }) => {
       </form>
 
       {error && <div className="error-message">{error}</div>}
+
+      {/* Message below the form */}
+      <p className="login-info-message">
+        Please login with the universal credentials provided by ACT. If you are unaware of these credentials, please contact an administrator.
+      </p>
     </div>
   );
 };
