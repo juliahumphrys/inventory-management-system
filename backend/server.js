@@ -23,7 +23,7 @@ console.log('Public IP:', process.env.PUBLIC_IP);
 
 // Middleware
 app.use(cors({
-  origin: ['https://actinventory.com', 'http://localhost:3000'], // Allow production and local domains
+  origin: ['*'], // Allow production and local domains
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // Allow cookies
 })); // Enables Cross-Origin Resource Sharing
