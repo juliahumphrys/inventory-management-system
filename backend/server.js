@@ -1,7 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
-const path = require('path'); // For handling paths
+const path = require('path'); 
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(bodyParser.json()); // Now it's correctly placed
+app.use(bodyParser.json()); 
 
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
@@ -20,15 +20,12 @@ const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
 console.log('Public IP:', process.env.PUBLIC_IP);
 console.log('Private IP:', process.env.PRIVATE_IP);
 
-// Additional code (like routes) goes below this point
-
-
 // Middleware
 app.use(cors({
-  origin: ['https://actinventory.com', 'http://localhost:3000'], // Allow production and local domains
+  origin: ['https://actinventory.com', 'http://localhost:3000'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // Allow cookies
-})); // Enables Cross-Origin Resource Sharing
+  credentials: true, 
+})); 
 
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
@@ -130,6 +127,7 @@ db.serialize(() => {
   )`);
 });
 
+
 // Routes 
 
 // Fetch all items 
@@ -163,7 +161,7 @@ app.post('/items', (req, res) => {
   const sql = 'INSERT INTO itemInfo (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
   const params = [itemNumber, itemName, itemCategory, itemQuantity, itemLocation];
 
-  console.log("Adding item:", params); // Log the item being added
+  console.log("Adding item:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -218,7 +216,7 @@ app.post('/items/:itemNumber/advanced', (req, res) => {
   const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
   const params = [req.params.itemNumber, itemCost, itemCondition, itemDescription];
 
-  console.log("Adding advanced item info:", params); // Log the advanced item info being added
+  console.log("Adding advanced item info:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -263,7 +261,7 @@ app.post('/items/:itemNumber/historical', (req, res) => {
   const sql = 'INSERT INTO historicalItemInfo (itemNumber, dateLastUsed, showLastUsed) VALUES (?, ?, ?)';
   const params = [req.params.itemNumber, dateLastUsed, showLastUsed];
 
-  console.log("Adding historical item info:", params); // Log the historical item info being added
+  console.log("Adding historical item info:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -310,46 +308,42 @@ app.post('/GeneralLogin', (req, res) => {
   }
 });
 
-
-//search bar
-// Search bar with data from multiple tables
+  
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
-  console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
 
   if (!itemNumber) {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
 
-  // Use LEFT JOIN to combine data from the three tables based on itemNumber
-  const sql = `
+  const sqll = `
     SELECT 
-      itemInfo.*,
-      advancedItemInfo.itemCost, 
-      advancedItemInfo.itemCondition, 
-      advancedItemInfo.itemDescription,
-      historicalItemInfo.dateLastUsed,
-      historicalItemInfo.showLastUsed
+      i.itemNumber, i.itemName, i.itemCategory, i.itemQuantity, i.itemLocation, i.itemPicture,
+      a.itemCost, a.itemCondition, a.itemDescription,
+      h.dateLastUsed, h.showLastUsed
     FROM 
-      itemInfo 
+      itemInfo i
     LEFT JOIN 
-      advancedItemInfo ON itemInfo.itemNumber = advancedItemInfo.itemNumber
+      advancedItemInfo a ON i.itemNumber = a.itemNumber
     LEFT JOIN 
-      historicalItemInfo ON itemInfo.itemNumber = historicalItemInfo.itemNumber
+      historicalItemInfo h ON i.itemNumber = h.itemNumber
     WHERE 
-      itemInfo.itemNumber = ?
+      i.itemNumber = ?
   `;
 
-  db.get(sql, [itemNumber], (err, row) => {
+  db.get(sqll, [itemNumber], (err, row) => {
     if (err) {
       return res.status(500).json({ success: false, error: err.message });
     }
+
     if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
+      return res.status(404).json({ success: false, error: "No items found" });
     }
+
     res.json({ success: true, data: row });
   });
 });
+
 
 
 // Endpoint to add a New Admin

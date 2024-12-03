@@ -6,7 +6,6 @@ import Home from './Components/Home';
 import Inventory from './Components/Inventory';
 import Developers from './Components/Developers';
 import './App.css';
-import Reports from './Components/Reports';
 import AdminPage from './Components/AdminPage';
 import AdminLogin from './Components/AdminLogin';
 import GeneralLogin from './Components/GeneralLogin';
@@ -37,7 +36,6 @@ function App() {
           <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/home" element={isLoggedIn ? <Home /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/inventory" element={isLoggedIn ? <Inventory /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/Reports" element={isLoggedIn ? <Reports /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/Developers" element={isLoggedIn ? <Developers /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/AdminPage" element={<AdminPage />} />
