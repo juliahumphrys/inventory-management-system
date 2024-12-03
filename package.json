@@ -14,7 +14,8 @@
     "react-router-dom": "^6.27.0",
     "react-scripts": "^4.0.3",
     "sqlite3": "^5.1.7",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts --max-http-header-size=8192 start"

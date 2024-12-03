@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import * as XLSX from 'xlsx';
 
 const Reports = () => {
   const [showAdminForm, setShowAdminForm] = useState(false);
@@ -14,25 +15,23 @@ const Reports = () => {
     includeAdvancedInfo: false,
     includeHistoricalInfo: false,
   });
+  const [reportData, setReportData] = useState(null);
 
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [deleteItemNumber, setDeleteItemNumber] = useState('');
   const [deleteError, setDeleteError] = useState('');
   const [deleteSuccess, setDeleteSuccess] = useState('');
 
-  // Toggle the admin form display
   const toggleAdminForm = () => {
     setShowAdminForm(!showAdminForm);
     setSuccessMessage('');
     setError('');
   };
 
-  // Toggle the inventory report form display
   const toggleReportForm = () => {
     setShowReportForm(!showReportForm);
   };
 
-  // Toggle the delete item form display
   const toggleDeleteForm = () => {
     setShowDeleteForm(!showDeleteForm);
     setDeleteError('');
@@ -49,7 +48,6 @@ const Reports = () => {
     setReportOptions({ ...reportOptions, [name]: checked });
   };
 
-  // Function to save new admin
   const handleSaveAdmin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -64,7 +62,6 @@ const Reports = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/admins', newAdmin);
-
       if (response.status === 200) {
         setSuccessMessage('Successfully saved new Admin user');
         setNewAdmin({ username: '', password: '' });
@@ -79,20 +76,18 @@ const Reports = () => {
   };
 
   const handleGenerateReport = async () => {
+    console.log('Generate Report button clicked');
+    console.log('Report Options:', reportOptions);
+
     try {
-      const response = await axios.post('/generate-inventory-report', reportOptions, {
-        responseType: 'blob', // Ensures file download
-      });
-      const blob = new Blob([response.data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'inventory_report.xlsx');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const response = await axios.post('/generate-inventory-report', reportOptions);
+      console.log('API Response:', response.data);
+
+      if (response.data && Array.isArray(response.data)) {
+        setReportData(response.data);
+      } else {
+        console.error('Unexpected response format:', response.data);
+      }
     } catch (error) {
       console.error('Error generating report:', error);
     }
@@ -200,6 +195,12 @@ const Reports = () => {
           </button>
         </div>
       )}
+      {reportData && (
+        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid black', width: '80%', maxHeight: '300px', overflowY: 'auto', textAlign: 'left' }}>
+          <h3>Inventory Report Preview</h3>
+          <pre>{JSON.stringify(reportData, null, 2)}</pre>
+        </div>
+      )}
 
       {/* Delete Item Section */}
       <button onClick={toggleDeleteForm} style={{ margin: '10px 0', padding: '10px' }}>
@@ -220,7 +221,7 @@ const Reports = () => {
             />
           </label>
           <button type="submit" style={{ padding: '10px', marginTop: '10px' }}>
-            Search Item
+            Delete Item
           </button>
         </form>
       )}
