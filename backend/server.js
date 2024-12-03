@@ -13,12 +13,10 @@ app.use(bodyParser.json()); // Now it's correctly placed
 
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
-const privateIP = process.env.PRIVATE_IP;
 const baseUrl = process.env.BASE_URL;
 const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
 
 console.log('Public IP:', process.env.PUBLIC_IP);
-console.log('Private IP:', process.env.PRIVATE_IP);
 
 // Additional code (like routes) goes below this point
 
@@ -462,6 +460,6 @@ app.post('/admins', (req, res) => {
 
 
  // Start the server
- app.listen(port, () => {
+ app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on ${baseDomain}:${port}`);
 });
