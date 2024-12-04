@@ -110,7 +110,7 @@ const AdminPage = () => {
     }
 
     try {
-      const response = await axios.delete(`/items/delete/${deleteItemNumber}`);
+      const response = await axios.delete(`/items/${deleteItemNumber}/delete`);
       if (response.status === 200) {
         setDeleteSuccess('Item deleted successfully.');
         setDeleteItemNumber('');
@@ -221,7 +221,7 @@ const AdminPage = () => {
             />
           </label>
           <button type="submit" style={{ padding: '10px', marginTop: '10px' }}>
-            Search Item
+            Confirm Delete Item
           </button>
         </form>
       )}

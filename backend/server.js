@@ -192,10 +192,10 @@ app.put('/items/:itemNumber', (req, res) => {
 
 
 // Delete an item
-app.delete('/items/delete/:itemNumber', (req, res) => {
+app.delete('/items/:deleteItemNumber/delete', (req, res) => {
   console.log('delete request received');
   const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
-  const params = [req.params.itemNumber];
+  const params = [req.params.deleteItemNumber];
   db.run(sql, params, (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
