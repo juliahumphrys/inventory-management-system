@@ -5,19 +5,14 @@ const path = require('path'); // For handling paths
 const bodyParser = require('body-parser');
 
 const app = express();
-
-// Middleware
-app.use(bodyParser.json()); // Now it's correctly placed
-
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
+const privateIP = process.env.PRIVATE_IP;
 const baseUrl = process.env.BASE_URL;
 const baseDomain = process.env.BASE_DOMAIN || 'http://localhost';
 
 console.log('Public IP:', process.env.PUBLIC_IP);
-
-// Additional code (like routes) goes below this point
-
+console.log('Private IP:', process.env.PRIVATE_IP);
 
 // Middleware
 app.use(cors({
@@ -33,10 +28,17 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-// Middleware
-app.use(cors()); // Enables Cross-Origin Resource Sharing
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.protocol !== 'https') {
+      res.redirect(`https://${req.headers.host}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
 
 // Connect to the SQLite database 
 const db = new sqlite3.Database('./act_inventory.db', (err) => {
@@ -130,6 +132,10 @@ app.get('/items', (req, res) => {
     }
     res.json({ message: 'success', data: rows });
   });
+});
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the Inventory Management System');
 });
 
 const addAdminUser = (username, password) => {
@@ -304,6 +310,28 @@ app.post('/GeneralLogin', (req, res) => {
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
     console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+  if (!itemNumber) {
+    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
+  }
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+  db.get(sql, [itemNumber], (err, row) => {
+    if (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ success: false, message: "No item found with that item number" });
+    }
+    res.json({ success: true, data: row });
+  });
+});
+
+
+//search bar
+app.get('/items/search', (req, res) => {
+  const { itemNumber } = req.query;
+    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
   if (!itemNumber) {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
@@ -318,8 +346,6 @@ app.get('/items/search', (req, res) => {
     res.json({ success: true, data: row });
   });
 });
-
-
 //search bar
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
@@ -448,6 +474,6 @@ app.post('/admins', (req, res) => {
 
 
  // Start the server
- app.listen(port, '0.0.0.0', () => {
+ app.listen(port, () => {
   console.log(`Server is running on ${baseDomain}:${port}`);
 });
