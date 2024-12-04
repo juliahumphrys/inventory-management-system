@@ -27,6 +27,7 @@ app.use(cors({
   credentials: true, 
 })); 
 
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ extended: true, limit: '200mb' }));
 app.use(bodyParser.json({ limit: '200mb' }));
