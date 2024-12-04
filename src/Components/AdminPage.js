@@ -123,7 +123,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Add New Admin Section */}
       <button onClick={toggleAdminForm} style={{ margin: '10px 0', padding: '10px' }}>
         Add New Admin
