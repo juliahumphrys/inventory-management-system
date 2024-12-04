@@ -329,7 +329,6 @@ app.get('/items/search', (req, res) => {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
   const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
   db.get(sql, [itemNumber], (err, row) => {
     if (err) {
       return res.status(500).json({ success: false, error: err.message });
