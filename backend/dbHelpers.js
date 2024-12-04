@@ -13,6 +13,7 @@ function getItemByNumber(itemNumber, callback) {
       WHERE 
         i.itemNumber = ?
     `;
+  
     db.get(sql, [itemNumber], callback);
   }
   
