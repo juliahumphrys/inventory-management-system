@@ -363,7 +363,9 @@ app.get('/items/search', (req, res) => {
   });
 });
 
-
+app.get('/', (req, res) => {
+  res.send('Backend is running.');
+});
 
 // Endpoint to add a New Admin
 app.post('/admins', (req, res) => {
