@@ -15,6 +15,19 @@ function Inventory() {
   const [showHistoricalForm, setShowHistoricalForm] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('/items');
+        setItems(response.data.data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      }
+    };
+    fetchItems();
+  }, []);  // Fetch items when the component mounts
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsSubmitted(true);
@@ -134,6 +147,8 @@ function Inventory() {
     const { name, value } = e.target;
     setHistoricalItem({ ...newHistoricalItem, [name]: value });
   };
+
+  
 
   return (
     <div>
@@ -262,10 +277,55 @@ function Inventory() {
               </button>
             </div>
           </form>
+
+          
         </div>
+        
       )}
+            {/* Display the updated list of items */}
+            <Display items={items} />
     </div>
   );
 }
+
+const Display = ({ items }) => (
+  <div class="table-container">
+    <h1>Latest Inventory</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Item Number</th>
+          <th>Item Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Location</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.length > 0 ? (
+          items.map((item) => (
+            <tr key={item.itemNumber}>
+              <td>{item.itemNumber}</td>
+              <td>{item.itemName}</td>
+              <td>{item.itemCategory}</td>
+              <td>{item.itemQuantity}</td>
+              <td>{item.itemLocation}</td>
+              <td>{item.itemImage}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No items found</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+);
+
+
+
+
 
 export default Inventory;
