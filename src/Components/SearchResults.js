@@ -16,6 +16,7 @@ const SearchResults = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
+        console.log(`Sending request to /items/search?itemNumber=${encodeURIComponent(query)}`);
         const response = await fetch(`/items/search?itemNumber=${encodeURIComponent(query)}`);
         if (!response.ok) {
           throw new Error('Failed to fetch search results');
@@ -92,7 +93,7 @@ const SearchResults = () => {
     <strong>Item Category:</strong>
     <select
       name="itemCategory"
-      value={editingItem.itemCategory}
+      value={editingItem.itemCategory || ""}
       onChange={handleEditChange}
     >
       <option value="" disabled>Select Item Category</option>
@@ -130,7 +131,7 @@ const SearchResults = () => {
     <strong>Item Condition:</strong>
     <select
       name="itemCondition"
-      value={editingItem.itemCondition}
+      value={editingItem.itemCondition || ""}
       onChange={handleEditChange}
     >
       <option value="" disabled>Select Item Condition</option>
