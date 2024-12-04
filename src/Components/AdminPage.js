@@ -1,4 +1,3 @@
-// src/pages/AdminPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import './AdminPage.css';
@@ -65,7 +64,7 @@ const AdminPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/admins', newAdmin);
+      const response = await axios.post('/admins', newAdmin);
 
       if (response.status === 200) {
         setSuccessMessage('Successfully saved new Admin user');
@@ -111,7 +110,7 @@ const AdminPage = () => {
     }
 
     try {
-      const response = await axios.delete(`/items/${deleteItemNumber}`);
+      const response = await axios.delete(`/items/delete/${deleteItemNumber}`);
       if (response.status === 200) {
         setDeleteSuccess('Item deleted successfully.');
         setDeleteItemNumber('');

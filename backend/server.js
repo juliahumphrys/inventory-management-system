@@ -1,10 +1,16 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
-const path = require('path'); // For handling paths
+const path = require('path'); 
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
+// Initialize the app variable before using it
 const app = express();
+
+// Middleware
+app.use(bodyParser.json()); 
+
 const port = process.env.PORT || 3000;
 const publicIP = process.env.PUBLIC_IP;
 const privateIP = process.env.PRIVATE_IP;
@@ -16,16 +22,15 @@ console.log('Private IP:', process.env.PRIVATE_IP);
 
 // Middleware
 app.use(cors({
-  origin: ['https://actinventory.com', 'http://localhost:3000'], // Allow production and local domains
+  origin: ['https://actinventory.com', 'http://localhost:3000'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // Allow cookies
-})); // Enables Cross-Origin Resource Sharing
+  credentials: true, 
+})); 
 
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ extended: true, limit: '100mb' }));
-
-app.use(bodyParser.json({ limit: '100mb' }));
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(express.json({ limit: '200mb' }));
+app.use(express.urlencoded({ extended: true, limit: '200mb' }));
+app.use(bodyParser.json({ limit: '200mb' }));
+app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 
@@ -41,7 +46,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Connect to the SQLite database 
-const db = new sqlite3.Database('./act_inventory.db', (err) => {
+const dbPath = process.env.DB_PATH || './act_inventory.db';
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Could not connect to the database', err);
   } else {
@@ -121,6 +127,7 @@ db.serialize(() => {
   )`);
 });
 
+
 // Routes 
 
 
@@ -134,10 +141,6 @@ app.get('/items', (req, res) => {
     }
     res.json({ message: 'success', data: rows });
   });
-});
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the Inventory Management System');
 });
 
 const addAdminUser = (username, password) => {
@@ -160,7 +163,7 @@ app.post('/items', (req, res) => {
   const sql = 'INSERT INTO itemInfo (itemNumber, itemName, itemCategory, itemQuantity, itemLocation) VALUES (?, ?, ?, ?, ?)';
   const params = [itemNumber, itemName, itemCategory, itemQuantity, itemLocation];
 
-  console.log("Adding item:", params); // Log the item being added
+  console.log("Adding item:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -186,8 +189,11 @@ app.put('/items/:itemNumber', (req, res) => {
   });
 });
 
+
+
 // Delete an item
-app.delete('/items/:itemNumber', (req, res) => {
+app.delete('/items/delete/:itemNumber', (req, res) => {
+  console.log('delete request received');
   const sql = 'DELETE FROM itemInfo WHERE itemNumber = ?';
   const params = [req.params.itemNumber];
   db.run(sql, params, (err) => {
@@ -215,7 +221,7 @@ app.post('/items/:itemNumber/advanced', (req, res) => {
   const sql = 'INSERT INTO advancedItemInfo (itemNumber, itemCost, itemCondition, itemDescription) VALUES (?, ?, ?, ?)';
   const params = [req.params.itemNumber, itemCost, itemCondition, itemDescription];
 
-  console.log("Adding advanced item info:", params); // Log the advanced item info being added
+  console.log("Adding advanced item info:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -260,7 +266,7 @@ app.post('/items/:itemNumber/historical', (req, res) => {
   const sql = 'INSERT INTO historicalItemInfo (itemNumber, dateLastUsed, showLastUsed) VALUES (?, ?, ?)';
   const params = [req.params.itemNumber, dateLastUsed, showLastUsed];
 
-  console.log("Adding historical item info:", params); // Log the historical item info being added
+  console.log("Adding historical item info:", params); 
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -277,6 +283,8 @@ app.get('/items/latest', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+
+    // If the query is successful, send the items as a response
     res.json({ items: rows });
   });
 });
@@ -319,67 +327,47 @@ app.post('/GeneralLogin', (req, res) => {
   }
 });
 
-
-//search bar
+  
 app.get('/items/search', (req, res) => {
   const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
+
   if (!itemNumber) {
     return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
   }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
+
+  const sql = `
+    SELECT 
+      i.itemNumber, i.itemName, i.itemCategory, i.itemQuantity, i.itemLocation, i.itemPicture,
+      a.itemCost, a.itemCondition, a.itemDescription,
+      h.dateLastUsed, h.showLastUsed
+    FROM 
+      itemInfo i
+    LEFT JOIN 
+      advancedItemInfo a ON i.itemNumber = a.itemNumber
+    LEFT JOIN 
+      historicalItemInfo h ON i.itemNumber = h.itemNumber
+    WHERE 
+      i.itemNumber = ?
+  `;
+
   db.get(sql, [itemNumber], (err, row) => {
     if (err) {
       return res.status(500).json({ success: false, error: err.message });
     }
+
     if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
+      return res.status(404).json({ success: false, error: "No items found" });
     }
+
     res.json({ success: true, data: row });
   });
 });
 
 
-//search bar
-app.get('/items/search', (req, res) => {
-  const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
-  if (!itemNumber) {
-    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
-  }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  db.get(sql, [itemNumber], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
-    }
-    res.json({ success: true, data: row });
-  });
-});
-//search bar
-app.get('/items/search', (req, res) => {
-  const { itemNumber } = req.query;
-    console.log('Test1, itemNumber is', itemNumber || 'No itemNumber passed');
-  if (!itemNumber) {
-    return res.status(400).json({ success: false, error: "itemNumber parameter is required" });
-  }
-  const sql = `SELECT * FROM itemInfo WHERE itemNumber = ?`;
-  db.get(sql, [itemNumber], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    if (!row) {
-      return res.status(404).json({ success: false, message: "No item found with that item number" });
-    }
-    res.json({ success: true, data: row });
-  });
-});
+
 // Endpoint to add a New Admin
 app.post('/admins', (req, res) => {
+  console.log('marker')
   const { username, password } = req.body;
 
   if (!username || !password) {

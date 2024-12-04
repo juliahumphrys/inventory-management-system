@@ -22,15 +22,9 @@ function NavBar() {
         <ul className="navbar-list">
           <li><Link to="/">Home</Link></li>
           <li><Link to="/inventory">Inventory</Link></li>
-<<<<<<< Updated upstream
-          <li><Link to="/reports">Reports</Link></li>
-          <li><Link to="/developers">Developers Page</Link></li>
-          <li><Link to="/login">Administrators</Link></li>
-=======
           <li><Link to="/AdminLogin">Administrators</Link></li>
           <li><Link to="/developers">Developers Page</Link></li>
 
->>>>>>> Stashed changes
         </ul>
         
         <form className="navbar-search" onSubmit={handleSearch}>
