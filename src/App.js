@@ -40,7 +40,7 @@ function App() {
           <h1>MyTrackIMS</h1>
         </header>
 
-        {/* Conditionally render the NavBar */}
+        {/* Render the NavBar for logged-in users */}
         {isLoggedIn && <NavBar />}
 
         <Routes>
@@ -48,8 +48,8 @@ function App() {
           <Route path="/" element={<GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/home" element={isLoggedIn ? <Home /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/inventory" element={isLoggedIn ? <Inventory /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/Reports" element={isLoggedIn ? <Reports /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/Developers" element={isLoggedIn ? <Developers /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/reports" element={isLoggedIn ? <Reports /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/developers" element={isLoggedIn ? <Developers /> : <GeneralLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/search-results" element={<SearchResults />} />
