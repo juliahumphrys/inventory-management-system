@@ -110,7 +110,7 @@ const AdminPage = () => {
     }
 
     try {
-      const response = await axios.delete(`/items/delete/${deleteItemNumber}`);
+      const response = await axios.delete(`/items/${deleteItemNumber}/delete`);
       if (response.status === 200) {
         setDeleteSuccess('Item deleted successfully.');
         setDeleteItemNumber('');
@@ -123,7 +123,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Add New Admin Section */}
       <button onClick={toggleAdminForm} style={{ margin: '10px 0', padding: '10px' }}>
         Add New Admin
@@ -221,7 +221,7 @@ const AdminPage = () => {
             />
           </label>
           <button type="submit" style={{ padding: '10px', marginTop: '10px' }}>
-            Search Item
+            Confirm Delete Item
           </button>
         </form>
       )}
