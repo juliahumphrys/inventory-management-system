@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import './NavBar.css';
 import { Link } from 'react-router-dom';
 
-
-
 function NavBar() {
   const [query, setQuery] = useState('');
   
@@ -22,10 +20,17 @@ function NavBar() {
     <>
       <nav className="navbar">
         <ul className="navbar-list">
-          <li><Link to="/home">Home</Link></li>
+          <li><Link to="/">Home</Link></li>
           <li><Link to="/inventory">Inventory</Link></li>
+<<<<<<< Updated upstream
+          <li><Link to="/reports">Reports</Link></li>
           <li><Link to="/developers">Developers Page</Link></li>
+          <li><Link to="/login">Administrators</Link></li>
+=======
           <li><Link to="/AdminLogin">Administrators</Link></li>
+          <li><Link to="/developers">Developers Page</Link></li>
+
+>>>>>>> Stashed changes
         </ul>
         
         <form className="navbar-search" onSubmit={handleSearch}>

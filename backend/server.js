@@ -123,6 +123,8 @@ db.serialize(() => {
 
 // Routes 
 
+
+
 // Fetch all items 
 app.get('/items', (req, res) => {
   const sql = 'SELECT * FROM itemInfo';
@@ -267,6 +269,18 @@ app.post('/items/:itemNumber/historical', (req, res) => {
     res.json({ message: 'Historical item info added successfully', id: this.lastID });
   });
 });
+
+app.get('/items/latest', (req, res) => {
+  const sql = 'SELECT * FROM itemInfo ORDER BY createdAt DESC LIMIT 20';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ items: rows });
+  });
+});
+
 
 app.post('/AdminLogin', (req, res) => {
   console.log('Received POST request to /AdminLogin');
