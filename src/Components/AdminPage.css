@@ -23,16 +23,13 @@ body {
     transition: background-color 0.3s ease;
   }
   
-/* Center the container in the middle of the page */
-/* Center the container but reduce its height */
-/* Center the child container */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: auto; /* Automatically adjust to content */
-    max-height: 80vh; /* Optional: Cap the height */
+    height: auto; 
+    max-height: 80vh; 
     padding: 20px;
     background-color: white;
     border: 1px solid #ddd;
@@ -41,7 +38,7 @@ body {
     max-width: 600px;
   }
   
-  /* Style the buttons inside the container */
+  /* style the buttons inside the container */
   .container button {
     background-color: #007bff;
     color: white;
@@ -65,7 +62,7 @@ body {
     cursor: not-allowed;
   }
   
-  /* Success and Error Messages Styling */
+  /* success and error messages */
   .container p {
     margin: 10px 0;
     font-size: 14px;

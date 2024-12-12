@@ -1,11 +1,13 @@
 import React from 'react';
-import './Developers.css'; // Import the CSS file
+import './Developers.css'; 
 
 function Developers() {
   return (
     <div className="developers-container">
       <h1>Meet the Developers</h1>
-      <p>This inventory management system was developed by a talented team of software developers who are dedicated to creating solutions for local organizations.</p>
+      <p>This project is designed as a capstone course to fulfill one of the Computer Science (CS) major requirements named Software Engineering Project, CS 4700 at John Carroll University (JCU). In this capstone course, students are grouped into small groups of 3-5 students. Each group works on a large software project for a real client or for an open-source community, where development teams will make widespread use of previously learned tools/techniques, their skills, ingenuity, and research abilities to address various issues and deliver a working, useful system. </p>
+
+      <p>In this capstone project, a webapp has been developed to address common challenges faced in Aurora Community Theatre (ACT) operations, such as locating misplaced/underutilized items, tracking the historical usage of inventory, managing item rentals, and monitoring availability in real-time. The idea has been started when Katie Hintze who has been involved in numerous productions put on by the ACT met with Dr. Almabrok Essa, CS professor at JCU and the capstone project instructor, and discussed the possibility of developing an app to enable theater staff to enhance productivity, reduce manual errors, and focus on creative and performance-related activities. Finally, after a semester-long endeavor of the below mentioned developers team this idea has become a reality. </p>
       <h2>Our Team</h2>
       <ul>
         <li>

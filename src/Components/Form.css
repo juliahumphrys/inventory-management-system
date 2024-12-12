@@ -39,7 +39,6 @@
     outline: none;
 }
 
-/* Style for buttons */
 .form-container form button {
     background-color: #4CAF50;
     color: white;
@@ -60,13 +59,11 @@
     background-color: #3e8e41;
 }
 
-/* Heading style */
 .form-container form h5 {
     margin-bottom: 20px;
     color: #333;
 }
 
-/* Image styling */
 .form-container form img {
     max-width: 200px;
     max-height: 200px;
